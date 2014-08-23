@@ -13,12 +13,12 @@ class Ship extends FlxSprite
 	public var fuel:Float;
 	private var _isTravelling:Bool;
 	
-	public function new(FromPlanet:Planet) 
+	public function new() 
 	{
-		super(FromPlanet.x, FromPlanet.y);
+		super();
 		//centerOrigin();
 		centerOffsets();
-		fromPlanet = toPlanet = FromPlanet;
+		
 		alpha = 0.5;
 		fuel = 10000.0;
 	}
@@ -31,6 +31,13 @@ class Ship extends FlxSprite
 	public function burnFuel(distance:Float)
 	{
 		fuel -= distance;
+	}
+	
+	public function setFromPlanet(FromPlanet:Planet) 
+	{
+		x = FromPlanet.x;
+		y = FromPlanet.y;
+		fromPlanet = toPlanet = FromPlanet;
 	}
 	
 	function get_isTravelling():Bool

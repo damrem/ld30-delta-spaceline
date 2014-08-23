@@ -1,5 +1,7 @@
 package;
+
 import flixel.text.FlxText;
+import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
 import MerchInUniv;
@@ -10,15 +12,29 @@ class MerchOnPlanet
 	public var currentPrice:Float;
 	public var availability:Float;
 	public var label:FlxText;
+	public var buyButton:FlxButton;
+	public var onBuy:Void->Void;
+	var trader:Trader;
 	
-	public function new(InUniv:MerchInUniv, Avalaibility:UInt)
+	public function new(InUniv:MerchInUniv, Avalaibility:UInt, _trader:Trader)
 	{
+		trader = _trader;
+		
 		inUniv = InUniv;
 		currentPrice = inUniv.refPrice * FlxRandom.floatRanged(0.75, 1.25);
 		availability = Avalaibility;
 		quantity = Std.int(availability * FlxRandom.floatRanged(0.75, 1.25));
 		
-		label = new FlxText(0, 0, 150, "empty");
+		label = new FlxText(0, 0, 150, "");
+		
+		buyButton = new FlxButton(100, 0, "Buy", buy);
+		//buyButton.width = 25;
+	}
+	
+	function buy() 
+	{
+		quantity --;
+		trader.toInventory(this);
 	}
 	
 	public function toString():String
@@ -28,7 +44,7 @@ class MerchOnPlanet
 	
 	public function updateText()
 	{
-		trace("updateText");
+		//trace("updateText");
 		label.text = this.toString();
 	}
 }

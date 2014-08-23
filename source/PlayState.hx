@@ -22,8 +22,8 @@ class PlayState extends FlxState
 	var merchs:Array<MerchInUniv>;
 	
 	var inventory:Inventory;
-	
 	var currentMarket:Market;
+	var trader:Trader;
 	
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -39,34 +39,43 @@ class PlayState extends FlxState
 		var cloth:MerchInUniv = new MerchInUniv('Cloth', 150.0);
 		var metal:MerchInUniv = new MerchInUniv('Metal', 200.0);
 		
+		ship = new Ship();
+		
+		inventory = new Inventory(ship);
+		inventory.addMerchType(new MerchInInventory(food));
+		inventory.addMerchType(new MerchInInventory(cloth));
+		inventory.addMerchType(new MerchInInventory(metal));
+		
+		trader = new Trader(currentMarket, inventory);
+		
 		planets = new FlxSpriteGroup(150, 0, 10000);
 		add(planets);
 
-		var planet1 = new Planet("Dhirsononn", 200, 100);
-		planet1.addMerch(new MerchOnPlanet(food, 500));
-		planet1.addMerch(new MerchOnPlanet(cloth, 1000));
+		var planet1 = new Planet("Dhirsononn", 200, 100, trader);
+		planet1.addMerchType(new MerchOnPlanet(cloth, 1000, trader));
+		planet1.addMerchType(new MerchOnPlanet(food, 500, trader));
+		planet1.addMerchType(new MerchOnPlanet(metal, 0, trader));
 		planets.add(planet1);
 
-		var planet2 = new Planet("Kenti", 100, 350);
-		planet2.addMerch(new MerchOnPlanet(cloth, 200));
-		planet2.addMerch(new MerchOnPlanet(metal, 1000));
+		var planet2 = new Planet("Kenti", 100, 350, trader);
+		planet2.addMerchType(new MerchOnPlanet(metal, 1000, trader));
+		planet2.addMerchType(new MerchOnPlanet(cloth, 200, trader));
+		planet2.addMerchType(new MerchOnPlanet(food, 0, trader));
 		planets.add(planet2);
 
-		var planet3 = new Planet("Bastion", 250, 250);
-		planet3.addMerch(new MerchOnPlanet(metal, 50));
-		planet3.addMerch(new MerchOnPlanet(food, 1000));
+		var planet3 = new Planet("Bastion", 250, 250, trader);
+		planet3.addMerchType(new MerchOnPlanet(food, 1000, trader));
+		planet3.addMerchType(new MerchOnPlanet(metal, 50, trader));
+		planet3.addMerchType(new MerchOnPlanet(cloth, 0, trader));
 		planets.add(planet3);
 		trace(planet3);
 		
-		//ships = new FlxSpriteGroup();
-		//add(ships);
-		
-		ship = new Ship(planet1);
+		ship.setFromPlanet(planet1);
 		add(ship);
 		currentMarket = planet1.market;
 		add(currentMarket);
 		
-		inventory = new Inventory(ship);
+		
 		inventory.x = FlxG.stage.stageWidth - inventory.width;
 		add(inventory);
 		
@@ -144,6 +153,7 @@ class PlayState extends FlxState
 		if (travelledDist == 0 && !ship.isTravelling && ship.fuel >= distToTravel)
 		{
 			trace("departing");
+			trace("ship", ship);
 			ship.burnFuel(distToTravel);
 			inventory.updateFuel();
 			ship.acceleration.set(travelStep.x, travelStep.y);
@@ -164,14 +174,4 @@ class PlayState extends FlxState
 	}
 }
 
-
-
-
-enum MerchandiseName
-{
-	Food;
-	Metal;
-	Fuel;
-	Cloth;
-}
 	

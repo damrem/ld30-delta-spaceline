@@ -12,10 +12,12 @@ import flixel.util.FlxSpriteUtil.LineStyle;
 class Market extends FlxSpriteGroup
 {
 	var place:Planet;
+	var trader:Trader;
 	
-	public function new(Place:Planet) 
+	public function new(Place:Planet, _trader:Trader) 
 	{
 		super();
+		trader = _trader;
 		
 		place = Place;
 		
@@ -28,23 +30,25 @@ class Market extends FlxSpriteGroup
 		add(nameLabel);
 	}
 	
-	public function addMerch(merch:MerchOnPlanet)
+	public function addMerchType(merch:MerchOnPlanet)
 	{
-		trace("addMerch");
+		//trace("addMerch");
 		merch.label.color = 0x000000;
 		add(merch.label);
-		updateLabels();
+		add(merch.buyButton);
+		
+		updateMerchs();
 	}
 	
-	public function updateLabels()
+	public function updateMerchs()
 	{
-		trace("updateLabels");
+		//trace("updateLabels");
 		var currentY = 30;
-		trace(place.merchs.length);
+		//trace(place.merchs.length);
 		for (i in 0...place.merchs.length)
 		{
 			var merch:MerchOnPlanet = place.merchs[i];
-			merch.label.y = currentY;
+			merch.label.y = merch.buyButton.y = currentY;
 			currentY += 30;
 			merch.updateText();
 		}

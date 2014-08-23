@@ -20,7 +20,7 @@ class Planet extends FlxSpriteGroup
 	var infLabel:FlxText;
 	public var market:Market;
 	
-	public function new(Name:String, X:Int, Y:Int) 
+	public function new(Name:String, X:Int, Y:Int, trader:Trader) 
 	{
 		super(X, Y, 10);
 		
@@ -32,7 +32,7 @@ class Planet extends FlxSpriteGroup
 		
 		body = new FlxSprite();
 		centerOrigin();
-		trace("body", body);
+		//trace("body", body);
 		origin.x = 8;
 		origin.y = 8;
 		add(body);
@@ -45,7 +45,7 @@ class Planet extends FlxSpriteGroup
 		infLabel .alignment = 'center';
 		add(infLabel);
 		
-		market = new Market(this);
+		market = new Market(this, trader);
 	}
 	
 	//	merchs appear and disappear, prices change
@@ -54,7 +54,7 @@ class Planet extends FlxSpriteGroup
 		//trace(name, "work");
 		for (i in 0...merchs.length)
 		{
-			if (FlxRandom.chanceRoll(50))
+			if (FlxRandom.chanceRoll(1))
 			{
 				var availShift = Math.ceil(merchs[i].availability / 10);
 				merchs[i].quantity += FlxRandom.intRanged( -availShift, availShift);
@@ -72,24 +72,24 @@ class Planet extends FlxSpriteGroup
 		
 	}
 	
-	public function addMerch(merch:MerchOnPlanet)
+	public function addMerchType(merch:MerchOnPlanet)
 	{
-		trace("addMerc");
+		//trace("addMerc");
 		merchs.push(merch);
-		market.addMerch(merch);
+		market.addMerchType(merch);
 		updateInfo();
 	}
 	
 	private function updateInfo()
 	{
-		trace("updateInfo");
+		//trace("updateInfo");
 		infLabel.text = "";
 		for (i in 0...merchs.length)
 		{
 			//trace(i);
 			infLabel.text += merchs[i].toString() + "\n";
 		}
-		market.updateLabels();
+		market.updateMerchs();
 	}
 	
 }
