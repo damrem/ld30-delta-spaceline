@@ -1,5 +1,7 @@
 package ;
 
+import flash.Lib;
+import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -13,9 +15,15 @@ import flixel.addons.display.FlxNestedSprite;
  */
 class PlayState extends FlxState
 {
-	//var ships:FlxSpriteGroup;
+	var t_sec:Float;
+	var t_lastFullSec:Int;
 	var ship:Ship;
 	var planets:FlxSpriteGroup;
+	var merchs:Array<MerchInUniv>;
+	
+	var inventory:Inventory;
+	
+	var currentMarket:Market;
 	
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -26,22 +34,27 @@ class PlayState extends FlxState
 		
 		MouseEventManager.init();
 		
-		var food:MercInUniv = new MercInUniv('food', 10.0);
-		var fuel:MercInUniv = new MercInUniv('fuel', 25.0);
-		var cloth:MercInUniv = new MercInUniv('cloth', 15.0);
-		var metal:MercInUniv = new MercInUniv('metal', 20.0);
+		var food:MerchInUniv = new MerchInUniv('Food', 100.0);
+		//var fuel:MerchInUniv = new MerchInUniv('StarFuel', 250.0);
+		var cloth:MerchInUniv = new MerchInUniv('Cloth', 150.0);
+		var metal:MerchInUniv = new MerchInUniv('Metal', 200.0);
 		
-		planets = new FlxSpriteGroup(0, 0, 10000);
+		planets = new FlxSpriteGroup(150, 0, 10000);
 		add(planets);
 
-		var planet1 = new Planet(200, 100);
-		planet1.addMerchandiseType(new MercOnPlanet(food, 10, 0.5));
+		var planet1 = new Planet("Dhirsononn", 200, 100);
+		planet1.addMerch(new MerchOnPlanet(food, 500));
+		planet1.addMerch(new MerchOnPlanet(cloth, 1000));
 		planets.add(planet1);
 
-		var planet2 = new Planet(100, 350);
+		var planet2 = new Planet("Kenti", 100, 350);
+		planet2.addMerch(new MerchOnPlanet(cloth, 200));
+		planet2.addMerch(new MerchOnPlanet(metal, 1000));
 		planets.add(planet2);
 
-		var planet3 = new Planet(250, 250);
+		var planet3 = new Planet("Bastion", 250, 250);
+		planet3.addMerch(new MerchOnPlanet(metal, 50));
+		planet3.addMerch(new MerchOnPlanet(food, 1000));
 		planets.add(planet3);
 		trace(planet3);
 		
@@ -50,6 +63,12 @@ class PlayState extends FlxState
 		
 		ship = new Ship(planet1);
 		add(ship);
+		currentMarket = planet1.market;
+		add(currentMarket);
+		
+		inventory = new Inventory(ship);
+		inventory.x = FlxG.stage.stageWidth - inventory.width;
+		add(inventory);
 		
 		MouseEventManager.setMouseUpCallback(planet1, selectPlanet);
 		MouseEventManager.setMouseUpCallback(planet2, selectPlanet);
@@ -83,14 +102,25 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
+		t_sec = Lib.getTimer() / 1000;
+		if (Math.floor(t_sec) > t_lastFullSec)
+		{
+			t_lastFullSec = Math.floor(t_sec);
+			tick();
+		}
+		
 		moveShip();
+	}
+	
+	function tick()
+	{
+		planets.callAll('work');
 	}
 	
 	function moveShip()
 	{
 		if (ship.toPlanet == ship.fromPlanet)
 		{
-			trace("return");
 			return;
 		}
 		
@@ -115,7 +145,9 @@ class PlayState extends FlxState
 		{
 			trace("departing");
 			ship.burnFuel(distToTravel);
+			inventory.updateFuel();
 			ship.acceleration.set(travelStep.x, travelStep.y);
+			remove(currentMarket);
 		}
 		//	arriving
 		else if(travelledDist > distToTravel)
@@ -125,11 +157,9 @@ class PlayState extends FlxState
 			ship.velocity.set(0, 0);
 			ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);
 			ship.fromPlanet = ship.toPlanet;
-			//ship.velocity.set(travelStep.x, travelStep.y);
+			currentMarket = ship.toPlanet.market;
+			add(currentMarket);
 		}
-		
-		//var distance = FlxMath.distanceBetween(ship.from, ship.to);
-		//trace(travelledDist);
 		
 	}
 }

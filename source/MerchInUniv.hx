@@ -4,7 +4,7 @@ package ;
  * ...
  * @author damrem
  */
-class MercInUniv
+class MerchInUniv
 {
 	public var name:String;
 	public var refPrice:Float;
