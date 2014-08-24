@@ -23,8 +23,10 @@ class Trader
 		trace("fromInventoryToMarket");
 		var market = PlayState.currentMarket;
 		market.buyMerch(merch.name);
+		
 		var merchOnPlanet:MerchOnPlanet = market.place.merchs[merch.name];
 		inventory.addCredits(Std.int(merchOnPlanet.currentPrice));
+		inventory.removeMerch(merch.name);
 	}
 	
 }

@@ -1,19 +1,19 @@
 package ;
+import flixel.group.FlxSpriteGroup;
 
 /**
  * ...
  * @author damrem
  */
-class Merch
+class Merch extends FlxSpriteGroup
 {
 	public var name:String;
-	public var quantity:UInt;
 	public static var refPrices:Map<String, Float> = new Map<String, Float>();
 	
-	public function new(Name:String, Quantity:UInt=0) 
+	public function new(Name:String) 
 	{
+		super();
 		name = Name;
-		quantity = Quantity;
 	}
 	
 	function get_refPrice():Float 

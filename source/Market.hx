@@ -12,7 +12,7 @@ import flixel.util.FlxSpriteUtil.LineStyle;
 class Market extends FlxSpriteGroup
 {
 	public var place:Planet;
-	var trader:Trader;
+	public var trader:Trader;
 	
 	public function new(Place:Planet, _trader:Trader) 
 	{

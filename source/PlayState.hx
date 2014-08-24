@@ -72,17 +72,6 @@ class PlayState extends FlxState
 		
 		inventory = new Inventory(ship);
 		trader = new Trader(inventory);
-		for (key in Merch.refPrices.keys())
-		{
-			inventory.addMerchType(new MerchInInventory(key, 0, trader));
-		}
-		/*
-		inventory.addMerchType(new MerchInInventory(food));
-		inventory.addMerchType(new MerchInInventory(cloth));
-		inventory.addMerchType(new MerchInInventory(metal));
-		*/
-		
-		
 		
 		planets = new FlxSpriteGroup(150, 0, 10000);
 		add(planets);

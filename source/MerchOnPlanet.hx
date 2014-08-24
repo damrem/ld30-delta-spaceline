@@ -14,6 +14,7 @@ class MerchOnPlanet extends Merch
 	public var buyButton:FlxButton;
 	public var onBuy:Void->Void;
 	var trader:Trader;
+	public var quantity:UInt;
 	
 	public function new(Name:String, Avalaibility:UInt, _trader:Trader)
 	{
@@ -41,7 +42,7 @@ class MerchOnPlanet extends Merch
 		}
 	}
 	
-	public function toString():String
+	override public function toString():String
 	{
 		return name + " x" + quantity + "\n¤" + Std.int(currentPrice) +"\n";
 	}

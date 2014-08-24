@@ -1,6 +1,11 @@
 package;
+import flash.display.CapsStyle;
+import flash.display.JointStyle;
+import flash.display.LineScaleMode;
 import flixel.addons.display.shapes.FlxShapeBox;
+import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
+import flixel.group.FlxTypedSpriteGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxSpriteUtil.FillStyle;
 import flixel.util.FlxSpriteUtil.LineStyle;
@@ -11,12 +16,15 @@ import flixel.util.FlxSpriteUtil.LineStyle;
  */
 class Inventory extends FlxSpriteGroup
 {
-	var merchs:Map<String, MerchInInventory>;
 	var credits:UInt = 10000;
 	var creditLabel:FlxText;
 	var fuel:Float;
 	var fuelLabel:FlxText;
 	var ship:Ship;
+	var size:Int = 6;
+	var stock:Array<MerchInInventory>;
+	var merchList:FlxSpriteGroup;
+	var emptySlots:flixel.group.FlxSpriteGroup;
 	
 	public function new(_ship:Ship) 
 	{
@@ -25,46 +33,48 @@ class Inventory extends FlxSpriteGroup
 		
 		ship = _ship;
 		
-		merchs = new Map<String, MerchInInventory>();
+		stock = new Array<MerchInInventory>();
 		
 		var line:LineStyle = { thickness:1 };
 		var fill:FillStyle = { hasFill:true, color:0x80ffffff, alpha:0.5 };
-		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 140, 460, line, fill);
+		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 150, 460, line, fill);
 		add(bg);
 		
-		var nameLabel:FlxText = new FlxText(10, 10, 120, "Delta Spaceline", 12);
+		var nameLabel:FlxText = new FlxText(10, 10, 130, "Delta Spaceline", 12);
 		add(nameLabel);
 		
-		creditLabel = new FlxText(10, 40, 120, "", 12);
+		creditLabel = new FlxText(10, 40, 130, "", 12);
 		creditLabel.color = 0x000000;
 		add(creditLabel);
 		updateCredit();
 		
-		fuelLabel = new FlxText(10, 60, 120, "", 12);
+		fuelLabel = new FlxText(10, 60, 130, "", 12);
 		fuelLabel.color = 0x000000;
 		add(fuelLabel);
-	}
-	
-	public function addMerchType(merch:MerchInInventory)
-	{
-		trace("addMerch(" + merch);
-		merchs[merch.name] = merch;
-		merch.label.color = 0x000000;
-		add(merch.label);
-		add(merch.sellButton);
-		updateMerchs();
+		
+		emptySlots = new FlxSpriteGroup(10, 100);
+		for (i in 0...size)
+		{
+			var X = i % 2 * 70;
+			var Y = Math.floor(i / 2) * 70;
+			emptySlots.add(new FlxShapeBox(X, Y, 60, 60, { thickness:5, color:0xff0000, scaleMode:LineScaleMode.NORMAL, jointStyle:JointStyle.BEVEL, capsStyle:CapsStyle.NONE }, { hasFill:true, color:0x40ffffff }));
+		}
+		add(emptySlots);
+		
+		merchList = new FlxSpriteGroup(10, 100);
+		add(merchList);
 	}
 	
 	public function buyMerch(name:String, price:Float)
 	{
 		trace("buyMerch");
-		if (price <= credits)
+		if (price <= credits && stock.length < size)
 		{
 			credits -= Std.int(price);
 			updateCredit();
 			
-			var merch:MerchInInventory = merchs[name];
-			merch.quantity ++;
+			stock.push(new MerchInInventory(name));
+			
 			updateMerchs();
 		}
 	}
@@ -90,15 +100,42 @@ class Inventory extends FlxSpriteGroup
 	
 	public function updateMerchs()
 	{
-		var currentY = 100;
-		for (key in merchs.keys())
+		trace("updateMerchs");
+		merchList.clear();
+		//var currentY = 0;
+		
+		trace(stock.length);
+		
+		for (i in 0...stock.length)
 		{
-			var merch:MerchInInventory = merchs[key];
-			merch.label.y = currentY;
-			currentY += 15;
-			merch.sellButton.y = currentY;
-			currentY += 35;
-			merch.updateText();
+			trace("------");
+			trace("i",i);
+			var merch:MerchInInventory = stock[i];
+			
+			trace(merch.name);
+			trace(merch);
+			merch.x = i % 2 * 70;
+			merch.y = Math.floor(i/2)*70;
+			
+			//merch.sellButton.y = currentY;
+			//currentY += 35;
+			merchList.add(merch);
+			//merchList.add(merch.sellButton);
+			trace("------");
+		}
+	}
+	
+	public function removeMerch(name:String)
+	{
+		trace("removeMerch");
+		for (i in 0...stock.length)
+		{
+			if (stock[i].name == name)
+			{
+				stock.splice(i, 1);
+				updateMerchs();
+				return;
+			}
 		}
 	}
 }

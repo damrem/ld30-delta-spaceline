@@ -1,6 +1,8 @@
 package;
+import flixel.addons.display.shapes.FlxShapeBox;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import flixel.util.FlxRandom;
 
 /**
  * ...
@@ -10,40 +12,25 @@ class MerchInInventory extends Merch
 {
 	public var label:FlxText;
 	public var sellButton:FlxButton;
-	var trader:Trader;
 	
-	public function new(Name:String, Quantity:UInt=0, _trader:Trader) 
+	public function new(Name:String) 
 	{
-		super(Name, Quantity);
+		super(Name);
 		
-		trader = _trader;
+		add(new FlxShapeBox(0, 0, 60, 60, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
 		
-		label = new FlxText(0, 0, 150, "");
+		label = new FlxText(0, 0, 60, "");
 		label.alignment = 'center';
+		label.text = Name;
+		add(label);
 		
-		sellButton = new FlxButton(30, 0, "Sell", sell);
-		sellButton.width = 25;
+		sellButton = new FlxButton(0, 20, "Sell", sell);
+		add(sellButton);
 	}
 	
 	function sell() 
 	{
 		trace("sell");
-		if (quantity > 0)
-		{
-			quantity--;
-			updateText();
-			trader.fromInventoryToMarket(this);
-		}
-	}
-	
-	public function toString():String
-	{
-		return name + " x" + quantity;
-	}
-	
-	public function updateText()
-	{
-		//trace("updateText");
-		label.text = this.toString();
+		PlayState.currentMarket.trader.fromInventoryToMarket(this);
 	}
 }
