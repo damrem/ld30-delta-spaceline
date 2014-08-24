@@ -18,31 +18,30 @@ class MerchOnPlanet extends Merch
 	var priceLabel:FlxText;
 	public var buyButton:FlxSpriteGroup;
 	public var onBuy:Void->Void;
-	var trader:Trader;
+	var _trader:Trader;
 	public var quantity:Int;
 	
-	public function new(Name:String, Avalaibility:UInt, _trader:Trader)
+	public function new(Name:String, Avalaibility:UInt)
 	{
 		super(Name);
-		
-		trader = _trader;
 		
 		add(new FlxShapeBox(0, 0, 120, 50, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
 		
 		currentPrice = refPrice * FlxRandom.floatRanged(0.75, 1.25);
 		availability = Avalaibility;
 		quantity = Std.int(availability * FlxRandom.floatRanged(0.75, 1.25));
+		trace("quantity", quantity);
 		
-		nameLabel = new FlxText(30, 15, 120, name);
+		nameLabel = new FlxText(30, 12, 120, "");
 		nameLabel.color = 0x000000;
 		add(nameLabel);
 		
-		priceLabel = new FlxText(57, 20, 50, "");
+		priceLabel = new FlxText(16, 35, 50, "");
 		priceLabel.alignment = 'right';
 		priceLabel.color = 0x000000;
 		add(priceLabel);
 		
-		var coin = new FlxSprite(106, 22);
+		var coin = new FlxSprite(65, 37);
 		coin.loadGraphic("assets/images/minicoin.gif");
 		add(coin);
 		
@@ -59,20 +58,31 @@ class MerchOnPlanet extends Merch
 		MouseEventManager.setMouseUpCallback(buyButton, buy);
 		add(buyButton);
 		
+		var icon = getNewIcon();
 		add(icon);
 		icon.x = 10;
 		icon.y = 10;
 		//buyButton.width = 25;
 	}
 	
-	function buy(?button:FlxSpriteGroup) 
+	function buy(button:FlxSpriteGroup) 
 	{
 		trace("buy");
+		trace("quantity", quantity, name);
 		if (quantity > 0)
 		{
-			quantity --;
-			trader.fromMarketToInventory(this);
+			trace("quantity ok");
+			trace("trader", _trader);
+			if (_trader.fromMarketToInventory(this))
+			{
+				trace("space and credit ok");
+				quantity --;
+				updateText();
+			}
 		}
+		
+		trace(PlayState.currentPlanet.name);
+		
 	}
 	
 	override public function toString():String
@@ -82,7 +92,41 @@ class MerchOnPlanet extends Merch
 	
 	public function updateText()
 	{
-		//trace("updateText");
-		priceLabel.text = ""+Std.int(currentPrice);
+		trace("updateText");
+		nameLabel.text = name + " x" + quantity;
+		priceLabel.text = "" + Std.int(currentPrice);
+		if (quantity == 0)
+		{
+			alpha = 0.25;
+		}
+		else
+		{
+			alpha = 1.0;
+		}
 	}
+	
+	public function getTrendIcon():FlxSprite
+	{
+		var trend = new FlxSprite();
+		if (currentPrice > refPrice * 1.1)
+		{
+			trend.loadGraphic("assets/images/up.gif");
+		}
+		else if (currentPrice < refPrice * 0.9)
+		{
+			trend.loadGraphic("assets/images/dn.gif");
+		}
+		else
+		{
+			trend.loadGraphic("assets/images/eq.gif");
+		}
+		return trend;
+	}
+	
+	private function set_trader(value:Trader):Trader 
+	{
+		return _trader = value;
+	}
+	
+	public var trader(null, set_trader):Trader;
 }

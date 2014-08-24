@@ -16,7 +16,7 @@ import flixel.util.FlxSpriteUtil.LineStyle;
  */
 class Inventory extends FlxSpriteGroup
 {
-	var credits:UInt = 10000;
+	var credits:UInt = 5000;
 	var creditLabel:FlxText;
 	//var fuel:Float;
 	//var fuelLabel:FlxText;
@@ -25,9 +25,15 @@ class Inventory extends FlxSpriteGroup
 	var stock:Array<MerchInInventory>;
 	var merchList:FlxSpriteGroup;
 	var emptySlots:flixel.group.FlxSpriteGroup;
+	static var _single:Inventory;
 	
 	public function new(_ship:Ship) 
 	{
+		if (_single == null)	_single = this;
+		else 
+		{
+			return;
+		}
 		trace("new(" + _ship);
 		super();
 		
@@ -47,7 +53,7 @@ class Inventory extends FlxSpriteGroup
 		coin.loadGraphic("assets/images/coin.gif");
 		add(coin);
 		
-		creditLabel = new FlxText(28, 40, 130, "", 12);
+		creditLabel = new FlxText(28, 40, 75, "", 12);
 		creditLabel.color = 0x000000;
 		add(creditLabel);
 		updateCredit();
@@ -67,6 +73,8 @@ class Inventory extends FlxSpriteGroup
 		
 		merchList = new FlxSpriteGroup(10, 100);
 		add(merchList);
+		
+		
 	}
 	
 	public function buyMerch(name:String, price:Float)
@@ -80,7 +88,10 @@ class Inventory extends FlxSpriteGroup
 			stock.push(new MerchInInventory(name));
 			
 			updateMerchs();
+			
+			return true;
 		}
+		return false;
 	}
 	
 	
@@ -135,4 +146,11 @@ class Inventory extends FlxSpriteGroup
 			}
 		}
 	}
+	
+	static function get_single():Inventory 
+	{
+		return _single;
+	}
+	
+	static public var single(get_single, null):Inventory;
 }

@@ -6,27 +6,25 @@ package;
  */
 class Trader 
 {
-	var inventory:Inventory;
-	public function new(_inventory) 
+	public function new()
 	{
-		inventory = _inventory;
+		
 	}
-	
-	public function fromMarketToInventory(merch:MerchOnPlanet)
+	public function fromMarketToInventory(merch:MerchOnPlanet):Bool
 	{
 		trace("fromMarketToInventory");
-		inventory.buyMerch(merch.name, merch.currentPrice);
+		return Inventory.single.buyMerch(merch.name, merch.currentPrice);
 	}
 	
 	public function fromInventoryToMarket(merch:MerchInInventory)
 	{
 		trace("fromInventoryToMarket");
-		var market = PlayState.currentMarket;
+		var market = PlayState.market;
 		market.buyMerch(merch.name);
 		
-		var merchOnPlanet:MerchOnPlanet = market.place.merchs[merch.name];
-		inventory.addCredits(Std.int(merchOnPlanet.currentPrice));
-		inventory.removeMerch(merch.name);
+		var merchOnPlanet:MerchOnPlanet = market.planet.merchsByName[merch.name];
+		Inventory.single.addCredits(Std.int(merchOnPlanet.currentPrice));
+		Inventory.single.removeMerch(merch.name);
 	}
 	
 }

@@ -42,6 +42,7 @@ class MerchInInventory extends Merch
 		MouseEventManager.setMouseUpCallback(sellButton, sell);
 		add(sellButton);
 		
+		var icon = getNewIcon();
 		add(icon);
 		icon.x = icon.y = 22;
 	}
@@ -49,6 +50,6 @@ class MerchInInventory extends Merch
 	function sell(?button:FlxSpriteGroup) 
 	{
 		trace("sell");
-		PlayState.currentMarket.trader.fromInventoryToMarket(this);
+		PlayState.market.trader.fromInventoryToMarket(this);
 	}
 }

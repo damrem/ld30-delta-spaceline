@@ -11,55 +11,77 @@ import flixel.util.FlxSpriteUtil.LineStyle;
  */
 class Market extends FlxSpriteGroup
 {
-	public var place:Planet;
+	var nameLabel:FlxText;
+	public var planet:Planet;
 	public var trader:Trader;
+	static var _single:Market;
+	var merchList:FlxSpriteGroup;
 	
-	public function new(Place:Planet, _trader:Trader) 
+	public function new() 
 	{
-		super();
-		trader = _trader;
+		if (_single == null)	_single = this;
+		else 
+		{
+			return;
+		}
 		
-		place = Place;
+		super();
+		trader = new Trader();
 		
 		var line:LineStyle = { thickness:1 };
 		var fill:FillStyle = { hasFill:true, color:0x80ffffff };
-		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 140, 460, line, fill);
+		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 120, 460, line, fill);
 		add(bg);
 		
-		var nameLabel:FlxText = new FlxText(10, 10, 120, place.name, 12);
+		nameLabel = new FlxText(10, 10, 100, "", 12);
 		nameLabel.alignment = 'center';
 		add(nameLabel);
+		
+		merchList = new FlxSpriteGroup(10, 60);
+		add(merchList);
 	}
 	
-	public function addMerchType(merch:MerchOnPlanet)
+	public function setPlanet(_planet:Planet)
 	{
-		//trace("addMerch");
-		add(merch);
+		trace("setPlanet");
+		planet = _planet;
+		nameLabel.text = planet.name;
 		
 		updateMerchs();
 	}
 	
 	public function updateMerchs()
 	{
-		//trace("updateLabels");
-		var currentY = 55;
+		trace("updateMerchs");
+		var currentY = 50;
+		merchList.clear();
+		merchList.x = 10;
 		//trace(place.merchs.length);
-		for (key in place.merchs.keys())
+		for (key in planet.merchsByName.keys())
 		{
-			var merch:MerchOnPlanet = place.merchs[key];
-			merch.x = 20;
+			var merch:MerchOnPlanet = planet.merchsByName[key];
+			merch.trader = trader;
+			merchList.add(merch);
+			merch.x = 10;
 			merch.y = currentY;
 			currentY += 60;
-			//merch.buyButton.y = currentY;
-			//currentY += 35;
 			merch.updateText();
 		}
 	}
 	
 	public function buyMerch(name:String) 
 	{
-		var merch:MerchOnPlanet = place.merchs[name];
+		trace("buyMerch");
+		var merch:MerchOnPlanet = planet.merchsByName[name];
+		//planet.alpha = 0.25;
 		merch.quantity ++;
 		merch.updateText();
 	}
+	
+	static function get_single():Market 
+	{
+		return _single;
+	}
+	
+	static public var single(get_single, null):Market;
 }

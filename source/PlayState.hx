@@ -27,8 +27,8 @@ class PlayState extends FlxState
 	var merchs:Array<MerchInUniv>;
 	
 	var inventory:Inventory;
-	public static var currentMarket:Market;
-	var trader:Trader;
+	public static var market:Market;
+	public static var currentPlanet:Planet;
 	
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -61,7 +61,7 @@ class PlayState extends FlxState
 		add(bg);
 		
 		//var food:MerchInUniv = new MerchInUniv('Food');
-		Merch.refPrices['Mush'] = 100;
+		Merch.refPrices['Food'] = 100;
 		Merch.refPrices['Metal'] = 150;
 		Merch.refPrices['Weapon'] = 200;
 		Merch.refPrices['Crystal'] = 500;
@@ -72,33 +72,45 @@ class PlayState extends FlxState
 		ship = new Ship();
 		
 		inventory = new Inventory(ship);
-		trader = new Trader(inventory);
+		
+		market = new Market();
+		market.x = market.y = 10;
+		add(market);
 		
 		planets = new FlxSpriteGroup(150, 0, 10000);
 		add(planets);
 
-		var planet1 = new Planet("Dhirsononn", 200, 100, trader);
-		planet1.addMerchType(new MerchOnPlanet('Crystal', 100, trader));
-		planet1.addMerchType(new MerchOnPlanet('Mush', 50, trader));
-		planet1.addMerchType(new MerchOnPlanet('Metal', 10, trader));
+		var planet1 = new Planet("Dhirsononn", 200, 100);
+		planet1.addMerchType(new MerchOnPlanet('Food', 50));
+		planet1.addMerchType(new MerchOnPlanet('Metal', 10));
+		planet1.addMerchType(new MerchOnPlanet('Weapon', 0));
+		planet1.addMerchType(new MerchOnPlanet('Crystal', 100));
 		planets.add(planet1);
+		MouseEventManager.setMouseUpCallback(planet1, selectPlanet);
 
-		var planet2 = new Planet("Kenti", 100, 350, trader);
-		planet2.addMerchType(new MerchOnPlanet('Metal', 100, trader));
-		planet2.addMerchType(new MerchOnPlanet('Weapon', 40, trader));
-		planet2.addMerchType(new MerchOnPlanet('Mush', 20, trader));
+		var planet2 = new Planet("Kenti", 100, 350);
+		planet2.alpha = 0.25;
+		planet2.addMerchType(new MerchOnPlanet('Food', 20));
+		planet2.addMerchType(new MerchOnPlanet('Metal', 100));
+		planet2.addMerchType(new MerchOnPlanet('Weapon', 40));
+		planet2.addMerchType(new MerchOnPlanet('Crystal', 0));
 		planets.add(planet2);
+		MouseEventManager.setMouseUpCallback(planet2, selectPlanet);
 
-		var planet3 = new Planet("Bastion", 250, 250, trader);
-		planet3.addMerchType(new MerchOnPlanet('Mush', 100, trader));
-		planet3.addMerchType(new MerchOnPlanet('Metal', 50, trader));
-		planet3.addMerchType(new MerchOnPlanet('Crystal', 0, trader));
+		var planet3 = new Planet("Bastion", 250, 250);
+		planet3.alpha = 0.25;
+		planet3.addMerchType(new MerchOnPlanet('Food', 100));
+		planet3.addMerchType(new MerchOnPlanet('Metal', 50));
+		planet3.addMerchType(new MerchOnPlanet('Weapon', 00));
+		planet3.addMerchType(new MerchOnPlanet('Crystal', 0));
 		planets.add(planet3);
+		MouseEventManager.setMouseUpCallback(planet3, selectPlanet);
 		
 		ship.setFromPlanet(planet1);
 		add(ship);
-		currentMarket = planet1.market;
-		add(currentMarket);
+		currentPlanet = planet1;
+		market.setPlanet(planet1);
+		
 		
 		
 		inventory.x = FlxG.stage.stageWidth - inventory.width - 10;
@@ -106,9 +118,9 @@ class PlayState extends FlxState
 		//inventory.updateFuel();
 		add(inventory);
 		
-		MouseEventManager.setMouseUpCallback(planet1, selectPlanet);
-		MouseEventManager.setMouseUpCallback(planet2, selectPlanet);
-		MouseEventManager.setMouseUpCallback(planet3, selectPlanet);
+		
+		
+		
 	}
 	
 	function selectPlanet(to:FlxObject)
@@ -150,7 +162,7 @@ class PlayState extends FlxState
 	
 	function tick()
 	{
-		planets.callAll('work');
+		//planets.callAll('work');
 	}
 	
 	function moveShip()
@@ -181,10 +193,9 @@ class PlayState extends FlxState
 			//trace("departing");
 			//trace("ship", ship);
 			inventory.addCredits( -distToTravel);
-			//ship.burnFuel(distToTravel);
-			//inventory.updateFuel();
 			ship.acceleration.set(travelStep.x, travelStep.y);
-			remove(currentMarket);
+			market.visible = false;
+			currentPlanet.alpha = 0.25;
 		}
 		//	arriving
 		else if(travelledDist > distToTravel)
@@ -194,8 +205,10 @@ class PlayState extends FlxState
 			ship.velocity.set(0, 0);
 			ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);
 			ship.fromPlanet = ship.toPlanet;
-			currentMarket = ship.toPlanet.market;
-			add(currentMarket);
+			currentPlanet = ship.toPlanet;
+			currentPlanet.alpha = 1.0;
+			market.setPlanet(currentPlanet);
+			market.visible = true;
 		}
 		
 	}

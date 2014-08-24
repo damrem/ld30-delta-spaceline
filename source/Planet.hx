@@ -3,6 +3,7 @@ import flash.display.CapsStyle;
 import flash.display.JointStyle;
 import flash.display.LineScaleMode;
 import flash.display.Sprite;
+import flixel.addons.display.shapes.FlxShapeBox;
 import flixel.addons.display.shapes.FlxShapeCircle;
 import flixel.text.FlxText;
 import flixel.util.FlxMath;
@@ -19,15 +20,15 @@ class Planet extends FlxSpriteGroup
 {	
 	public var name:String;
 	var nameLabel:FlxText;
-	public var merchs:Map<String, MerchOnPlanet>;
+	public var merchsByName:Map<String, MerchOnPlanet>;
 	var body:FlxSprite;
 	var selector:FlxShapeCircle;
-	var infLabel:FlxText;
-	public var market:Market;
+	//var infLabel:FlxText;
 	
 	var colors:Array<UInt> = [0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffff00, 0xffff00ff, 0xff00ffff];
+	var info:flixel.group.FlxSpriteGroup;
 	
-	public function new(Name:String, X:Int, Y:Int, trader:Trader) 
+	public function new(Name:String, X:Int, Y:Int) 
 	{
 		super(X, Y, 10);
 		
@@ -35,13 +36,15 @@ class Planet extends FlxSpriteGroup
 		
 		MouseEventManager.add(this);
 		
-		merchs = new Map<String, MerchOnPlanet>();
+		merchsByName = new Map<String, MerchOnPlanet>();
 		
 		var radius:UInt = FlxRandom.intRanged(8, 24);
 		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
 		body = new FlxShapeCircle( -radius, -radius, radius, { thickness:0, color:color }, { hasFill:true, color:color } );
 		centerOrigin();
 		add(body);
+		add(new FlxShapeCircle( Std.int( -radius * 0.875), Std.int( -radius * 0.875), Std.int(radius * 0.75), { thickness:0, color:0x40ffffff }, { hasFill:true, color:0x40ffffff } ));
+		add(new FlxShapeCircle( Std.int(-radius*0.6875), Std.int(-radius*0.6875), Std.int(radius*0.5), { thickness:0, color:0x40ffffff }, { hasFill:true, color:0x40ffffff } ));
 		//trace("body", body);
 		//origin.x = 8;
 		//origin.y = 8;
@@ -54,16 +57,19 @@ class Planet extends FlxSpriteGroup
 		
 		nameLabel = new FlxText( -50, radius, 100, name);
 		nameLabel.alignment = 'center';
-		nameLabel.alpha = 0.25;
+		//nameLabel.alpha = 0.25;
 		add(nameLabel);
 		
+		info = new FlxSpriteGroup();
+		
+		add(info);
+		
+		/*
 		infLabel = new FlxText( -50, 50, 100, "");
 		infLabel .alignment = 'center';
 		add(infLabel);
+		*/
 		hideInfo();
-		
-		market = new Market(this, trader);
-		market.x = market.y = 10;
 		
 		MouseEventManager.setMouseOverCallback(this, showInfo);
 		MouseEventManager.setMouseOutCallback(this, hideInfo);
@@ -71,23 +77,25 @@ class Planet extends FlxSpriteGroup
 	
 	function hideInfo(?planet:Planet) 
 	{
-		infLabel.visible = false;
+		info.visible = false;
+		//infLabel.visible = false;
 	}
 	
 	function showInfo(?planet:Planet) 
 	{
-		infLabel.visible = true;
+		info.visible = true;
+		//infLabel.visible = true;
 	}
 	
 	//	merchs appear and disappear, prices change
 	public function work()
 	{
 		//trace(name, "work");
-		for (key in merchs.keys())
+		for (key in merchsByName.keys())
 		{
 			if (FlxRandom.chanceRoll(1))
 			{
-				var merch:MerchOnPlanet = merchs[key];
+				var merch:MerchOnPlanet = merchsByName[key];
 				var availShift = Math.ceil(merch.availability / 10);
 				merch.quantity += FlxRandom.intRanged( -availShift, availShift);
 				if (merch.quantity < 0)	merch.quantity = 0;
@@ -99,30 +107,61 @@ class Planet extends FlxSpriteGroup
 				{
 					merch.currentPrice *= FlxRandom.floatRanged(0.875, 1);
 				}
+				updateInfo();
 			}
 		}
-		updateInfo();
 		
 	}
 	
 	public function addMerchType(merch:MerchOnPlanet)
 	{
 		//trace("addMerc");
-		merchs[merch.name] = merch;
-		market.addMerchType(merch);
+		merchsByName[merch.name] = merch;
 		updateInfo();
 	}
 	
 	private function updateInfo()
 	{
-		//trace("updateInfo");
-		infLabel.text = "";
-		for (key in merchs.keys())
+		trace("updateInfo");
+		//infLabel.text = "";
+		/*
+		for (key in merchsByName.keys())
 		{
 			//trace(i);
-			infLabel.text += merchs[key].toString() + "\n";
+			
+			infLabel.text += merchsByName[key].toString() + "\n";
 		}
-		market.updateMerchs();
+		*/
+		var currentY = 10;
+		info.clear();
+		info.add(new FlxShapeBox(0, 0, 52, 94, 
+		{ thickness:0, color:0xffffff, scaleMode:LineScaleMode.NORMAL, jointStyle:JointStyle.BEVEL, capsStyle:CapsStyle.NONE }, 
+		{ hasFill:true, color:0x80ffffff } ));
+		for (key in merchsByName.keys())
+		{
+			var merch:MerchOnPlanet = merchsByName[key];
+			
+			var icon = merch.getNewIcon();
+			//icon.loadGraphic(
+			
+			icon.x = 10;
+			icon.y = currentY;
+			info.add(icon);
+			
+			var trend = merch.getTrendIcon();
+			trend.x = 30;
+			trend.y = currentY + 2;
+			
+			trace("trend", trend);
+			info.add(trend);
+			
+			trace("icon", icon);
+			trace("info", info);
+			//info.add(new FlxText(10, currentY, 80, merch.icon));
+			currentY += 20;
+		}
 	}
+	
+	
 	
 }
