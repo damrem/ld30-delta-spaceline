@@ -19,8 +19,9 @@ class MerchInInventory
 		quantity = Quantity;
 		
 		label = new FlxText(0, 0, 150, "");
+		label.alignment = 'center';
 		
-		sellButton = new FlxButton(100, 0, "Sell");
+		sellButton = new FlxButton(30, 0, "Sell");
 		sellButton.width = 25;
 	}
 	
@@ -31,7 +32,7 @@ class MerchInInventory
 	
 	public function updateText()
 	{
-		trace("updateText");
+		//trace("updateText");
 		label.text = this.toString();
 	}
 }

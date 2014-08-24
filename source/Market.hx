@@ -23,10 +23,11 @@ class Market extends FlxSpriteGroup
 		
 		var line:LineStyle = { thickness:1 };
 		var fill:FillStyle = { hasFill:true, color:0x80ffffff };
-		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 150, 400, line, fill);
+		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 140, 460, line, fill);
 		add(bg);
 		
-		var nameLabel:FlxText = new FlxText(0, 0, 150, place.name, 12);
+		var nameLabel:FlxText = new FlxText(10, 10, 120, place.name, 12);
+		nameLabel.alignment = 'center';
 		add(nameLabel);
 	}
 	
@@ -43,13 +44,15 @@ class Market extends FlxSpriteGroup
 	public function updateMerchs()
 	{
 		//trace("updateLabels");
-		var currentY = 30;
+		var currentY = 55;
 		//trace(place.merchs.length);
 		for (i in 0...place.merchs.length)
 		{
 			var merch:MerchOnPlanet = place.merchs[i];
-			merch.label.y = merch.buyButton.y = currentY;
-			currentY += 30;
+			merch.label.y = currentY;
+			currentY += 25;
+			merch.buyButton.y = currentY;
+			currentY += 35;
 			merch.updateText();
 		}
 	}

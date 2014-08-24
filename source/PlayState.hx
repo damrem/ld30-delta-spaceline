@@ -1,13 +1,18 @@
 package ;
 
+import flash.display.BitmapData;
 import flash.Lib;
+import flixel.addons.display.shapes.FlxShapeCross;
+import flixel.addons.display.shapes.FlxShapeSquareDonut;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.plugin.MouseEventManager;
+import flixel.util.FlxBitmapUtil;
 import flixel.util.FlxMath;
+import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import flixel.addons.display.FlxNestedSprite;
 /**
@@ -33,6 +38,27 @@ class PlayState extends FlxState
 		super.create();
 		
 		MouseEventManager.init();
+		
+		var bg:FlxSpriteGroup = new FlxSpriteGroup();
+
+		var bmp:BitmapData = new BitmapData(640, 480);
+		var perlin:OptimizedPerlin = new OptimizedPerlin();
+		perlin.fill(bmp, 0, 0, 0);
+		var farfaraway = new FlxSprite(0, 0, bmp);
+		farfaraway.alpha = 0.15;
+		bg.add(farfaraway);
+		
+		for (i in 0...100)
+		{
+			var starlength:UInt = FlxRandom.intRanged(1, 5);
+			var starsize:UInt = FlxRandom.intRanged(0, 1);
+			var star:FlxShapeCross = new FlxShapeCross(FlxRandom.intRanged(0, 640), FlxRandom.intRanged(0, 480),
+			starlength, starsize, starlength, starsize, 0.5, 0.5, 
+			{ thickness: 0, color:0x00000000 }, { hasFill:true, color:0xffffffff } );
+			star.alpha = FlxRandom.intRanged(0, 1);
+			bg.add(star);
+		}
+		add(bg);
 		
 		var food:MerchInUniv = new MerchInUniv('Food', 100.0);
 		//var fuel:MerchInUniv = new MerchInUniv('StarFuel', 250.0);
@@ -68,7 +94,6 @@ class PlayState extends FlxState
 		planet3.addMerchType(new MerchOnPlanet(metal, 50, trader));
 		planet3.addMerchType(new MerchOnPlanet(cloth, 0, trader));
 		planets.add(planet3);
-		trace(planet3);
 		
 		ship.setFromPlanet(planet1);
 		add(ship);
@@ -76,7 +101,9 @@ class PlayState extends FlxState
 		add(currentMarket);
 		
 		
-		inventory.x = FlxG.stage.stageWidth - inventory.width;
+		inventory.x = FlxG.stage.stageWidth - inventory.width - 10;
+		inventory.y = 10;
+		inventory.updateFuel();
 		add(inventory);
 		
 		MouseEventManager.setMouseUpCallback(planet1, selectPlanet);
@@ -86,11 +113,11 @@ class PlayState extends FlxState
 	
 	function selectPlanet(to:FlxObject)
 	{
-		trace("selectPlanet(" + to);
+		//trace("selectPlanet(" + to);
 		if (!ship.isTravelling)
 		{
 			var planet:Planet = cast(to);
-			trace(to);
+			//trace(to);
 			ship.toPlanet = planet;
 		}
 	}
@@ -135,25 +162,24 @@ class PlayState extends FlxState
 		
 		//if the ship is departing, we use the energy necessary to the trip
 		var travelledDist = FlxMath.distanceBetween(ship.fromPlanet, ship);
+		/*
 		trace("travelledDist", travelledDist);
 		trace(ship.fromPlanet.x, ship.fromPlanet.y, ship.fromPlanet.origin);
 		trace(ship.x, ship.y, ship.origin);
+		*/
 		
 		var distToTravel = FlxMath.distanceBetween(ship.fromPlanet, ship.toPlanet);
-		trace("distToTravel", distToTravel);
+		//trace("distToTravel", distToTravel);
 		
 		var travelStep = FlxVector.get(ship.toPlanet.x - ship.fromPlanet.x, ship.toPlanet.y - ship.fromPlanet.y);
-		travelStep.scale(4);
-		trace("travelStep", travelStep);
+		//travelStep.scale(4);
+		//trace("travelStep", travelStep);
 		
 		//	departing
-		trace(ship.fromPlanet, ship.x, ship.y);
-		trace(!ship.isTravelling);
-		trace(ship.fuel >= distToTravel);
 		if (travelledDist == 0 && !ship.isTravelling && ship.fuel >= distToTravel)
 		{
-			trace("departing");
-			trace("ship", ship);
+			//trace("departing");
+			//trace("ship", ship);
 			ship.burnFuel(distToTravel);
 			inventory.updateFuel();
 			ship.acceleration.set(travelStep.x, travelStep.y);
@@ -162,7 +188,7 @@ class PlayState extends FlxState
 		//	arriving
 		else if(travelledDist > distToTravel)
 		{
-			trace("arriving");
+			//trace("arriving");
 			ship.acceleration.set(0, 0);
 			ship.velocity.set(0, 0);
 			ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);

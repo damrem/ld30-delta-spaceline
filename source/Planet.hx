@@ -1,5 +1,9 @@
 package ;
+import flash.display.CapsStyle;
+import flash.display.JointStyle;
+import flash.display.LineScaleMode;
 import flash.display.Sprite;
+import flixel.addons.display.shapes.FlxShapeCircle;
 import flixel.text.FlxText;
 import flixel.util.FlxMath;
 import MerchOnPlanet;
@@ -17,8 +21,11 @@ class Planet extends FlxSpriteGroup
 	var nameLabel:FlxText;
 	public var merchs:Array<MerchOnPlanet>;
 	var body:FlxSprite;
+	var selector:FlxShapeCircle;
 	var infLabel:FlxText;
 	public var market:Market;
+	
+	var colors:Array<UInt> = [0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffff00, 0xffff00ff, 0xff00ffff];
 	
 	public function new(Name:String, X:Int, Y:Int, trader:Trader) 
 	{
@@ -30,22 +37,32 @@ class Planet extends FlxSpriteGroup
 		
 		merchs = new Array<MerchOnPlanet>();
 		
-		body = new FlxSprite();
+		var radius:UInt = FlxRandom.intRanged(8, 24);
+		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
+		body = new FlxShapeCircle( -radius, -radius, radius, { thickness:0, color:color }, { hasFill:true, color:color } );
 		centerOrigin();
-		//trace("body", body);
-		origin.x = 8;
-		origin.y = 8;
 		add(body);
+		//trace("body", body);
+		//origin.x = 8;
+		//origin.y = 8;
 		
-		nameLabel = new FlxText( -50, 20, 100, name, 12);
+		//var selector:FlxShapeCircle = new FlxShapeCircle( -radius - 10, -radius - 10, radius + 20, 
+		//{ thickness:5, color:0xffffff, scaleMode:LineScaleMode.NORMAL, jointStyle:JointStyle.BEVEL, capsStyle:CapsStyle.NONE }, { hasFill:true, color:0xffff8000 } );
+//		var XY = - radius;
+		//selector = new FlxShapeCircle( -radius, -radius, radius+10, { thickness:5, color:0xffffffff }, { hasFill:true, color:0xffff8000 } );
+		//add(selector);
+		
+		nameLabel = new FlxText( -50, radius, 100, name);
 		nameLabel.alignment = 'center';
+		nameLabel.alpha = 0.25;
 		add(nameLabel);
 		
 		infLabel = new FlxText( -50, 50, 100, "");
 		infLabel .alignment = 'center';
-		add(infLabel);
+		//add(infLabel);
 		
 		market = new Market(this, trader);
+		market.x = market.y = 10;
 	}
 	
 	//	merchs appear and disappear, prices change

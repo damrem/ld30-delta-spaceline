@@ -25,9 +25,10 @@ class MerchOnPlanet
 		availability = Avalaibility;
 		quantity = Std.int(availability * FlxRandom.floatRanged(0.75, 1.25));
 		
-		label = new FlxText(0, 0, 150, "");
+		label = new FlxText(10, 0, 120, "");
+		label.alignment = 'center';
 		
-		buyButton = new FlxButton(100, 0, "Buy", buy);
+		buyButton = new FlxButton(30, 0, "Buy", buy);
 		//buyButton.width = 25;
 	}
 	
