@@ -27,7 +27,7 @@ class PlayState extends FlxState
 	var merchs:Array<MerchInUniv>;
 	
 	var inventory:Inventory;
-	var currentMarket:Market;
+	public static var currentMarket:Market;
 	var trader:Trader;
 	
 	/**
@@ -43,7 +43,7 @@ class PlayState extends FlxState
 
 		var bmp:BitmapData = new BitmapData(640, 480);
 		var perlin:OptimizedPerlin = new OptimizedPerlin();
-		perlin.fill(bmp, 0, 0, 0);
+		//perlin.fill(bmp, 0, 0, 0);
 		var farfaraway = new FlxSprite(0, 0, bmp);
 		farfaraway.alpha = 0.15;
 		bg.add(farfaraway);
@@ -60,39 +60,49 @@ class PlayState extends FlxState
 		}
 		add(bg);
 		
-		var food:MerchInUniv = new MerchInUniv('Food', 100.0);
+		//var food:MerchInUniv = new MerchInUniv('Food');
+		Merch.refPrices['Food'] = 100;
+		Merch.refPrices['Cloth'] = 150;
+		Merch.refPrices['Metal'] = 200;
 		//var fuel:MerchInUniv = new MerchInUniv('StarFuel', 250.0);
-		var cloth:MerchInUniv = new MerchInUniv('Cloth', 150.0);
-		var metal:MerchInUniv = new MerchInUniv('Metal', 200.0);
+		//var cloth:MerchInUniv = new MerchInUniv('Cloth', 150.0);
+		//var metal:MerchInUniv = new MerchInUniv('Metal', 200.0);
 		
 		ship = new Ship();
 		
 		inventory = new Inventory(ship);
+		trader = new Trader(inventory);
+		for (key in Merch.refPrices.keys())
+		{
+			inventory.addMerchType(new MerchInInventory(key, 0, trader));
+		}
+		/*
 		inventory.addMerchType(new MerchInInventory(food));
 		inventory.addMerchType(new MerchInInventory(cloth));
 		inventory.addMerchType(new MerchInInventory(metal));
+		*/
 		
-		trader = new Trader(currentMarket, inventory);
+		
 		
 		planets = new FlxSpriteGroup(150, 0, 10000);
 		add(planets);
 
 		var planet1 = new Planet("Dhirsononn", 200, 100, trader);
-		planet1.addMerchType(new MerchOnPlanet(cloth, 1000, trader));
-		planet1.addMerchType(new MerchOnPlanet(food, 500, trader));
-		planet1.addMerchType(new MerchOnPlanet(metal, 0, trader));
+		planet1.addMerchType(new MerchOnPlanet('Cloth', 1000, trader));
+		planet1.addMerchType(new MerchOnPlanet('Food', 500, trader));
+		planet1.addMerchType(new MerchOnPlanet('Metal', 0, trader));
 		planets.add(planet1);
 
 		var planet2 = new Planet("Kenti", 100, 350, trader);
-		planet2.addMerchType(new MerchOnPlanet(metal, 1000, trader));
-		planet2.addMerchType(new MerchOnPlanet(cloth, 200, trader));
-		planet2.addMerchType(new MerchOnPlanet(food, 0, trader));
+		planet2.addMerchType(new MerchOnPlanet('Metal', 1000, trader));
+		planet2.addMerchType(new MerchOnPlanet('Cloth', 200, trader));
+		planet2.addMerchType(new MerchOnPlanet('Food', 0, trader));
 		planets.add(planet2);
 
 		var planet3 = new Planet("Bastion", 250, 250, trader);
-		planet3.addMerchType(new MerchOnPlanet(food, 1000, trader));
-		planet3.addMerchType(new MerchOnPlanet(metal, 50, trader));
-		planet3.addMerchType(new MerchOnPlanet(cloth, 0, trader));
+		planet3.addMerchType(new MerchOnPlanet('Food', 1000, trader));
+		planet3.addMerchType(new MerchOnPlanet('Metal', 50, trader));
+		planet3.addMerchType(new MerchOnPlanet('Cloth', 0, trader));
 		planets.add(planet3);
 		
 		ship.setFromPlanet(planet1);

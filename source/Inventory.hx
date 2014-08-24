@@ -11,7 +11,7 @@ import flixel.util.FlxSpriteUtil.LineStyle;
  */
 class Inventory extends FlxSpriteGroup
 {
-	var merchs:Array<MerchInInventory>;
+	var merchs:Map<String, MerchInInventory>;
 	var credits:UInt = 10000;
 	var creditLabel:FlxText;
 	var fuel:Float;
@@ -25,7 +25,7 @@ class Inventory extends FlxSpriteGroup
 		
 		ship = _ship;
 		
-		merchs = new Array<MerchInInventory>();
+		merchs = new Map<String, MerchInInventory>();
 		
 		var line:LineStyle = { thickness:1 };
 		var fill:FillStyle = { hasFill:true, color:0x80ffffff, alpha:0.5 };
@@ -48,17 +48,33 @@ class Inventory extends FlxSpriteGroup
 	public function addMerchType(merch:MerchInInventory)
 	{
 		trace("addMerch(" + merch);
-		merchs.push(merch);
+		merchs[merch.name] = merch;
 		merch.label.color = 0x000000;
 		add(merch.label);
 		add(merch.sellButton);
 		updateMerchs();
 	}
 	
-	public function setCredits(Credits:UInt)
+	public function buyMerch(name:String, price:Float)
 	{
-		credits = Credits;
-		updateCredit;
+		trace("buyMerch");
+		if (price <= credits)
+		{
+			credits -= Std.int(price);
+			updateCredit();
+			
+			var merch:MerchInInventory = merchs[name];
+			merch.quantity ++;
+			updateMerchs();
+		}
+	}
+	
+	
+	
+	public function addCredits(Credits:UInt)
+	{
+		credits += Credits;
+		updateCredit();
 	}
 	
 	function updateCredit()
@@ -75,9 +91,9 @@ class Inventory extends FlxSpriteGroup
 	public function updateMerchs()
 	{
 		var currentY = 100;
-		for (i in 0...merchs.length)
+		for (key in merchs.keys())
 		{
-			var merch:MerchInInventory = merchs[i];
+			var merch:MerchInInventory = merchs[key];
 			merch.label.y = currentY;
 			currentY += 15;
 			merch.sellButton.y = currentY;

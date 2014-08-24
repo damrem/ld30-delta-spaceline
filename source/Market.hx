@@ -11,7 +11,7 @@ import flixel.util.FlxSpriteUtil.LineStyle;
  */
 class Market extends FlxSpriteGroup
 {
-	var place:Planet;
+	public var place:Planet;
 	var trader:Trader;
 	
 	public function new(Place:Planet, _trader:Trader) 
@@ -46,14 +46,21 @@ class Market extends FlxSpriteGroup
 		//trace("updateLabels");
 		var currentY = 55;
 		//trace(place.merchs.length);
-		for (i in 0...place.merchs.length)
+		for (key in place.merchs.keys())
 		{
-			var merch:MerchOnPlanet = place.merchs[i];
+			var merch:MerchOnPlanet = place.merchs[key];
 			merch.label.y = currentY;
 			currentY += 25;
 			merch.buyButton.y = currentY;
 			currentY += 35;
 			merch.updateText();
 		}
+	}
+	
+	public function buyMerch(name:String) 
+	{
+		var merch:MerchOnPlanet = place.merchs[name];
+		merch.quantity ++;
+		merch.updateText();
 	}
 }

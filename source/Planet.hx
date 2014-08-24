@@ -19,7 +19,7 @@ class Planet extends FlxSpriteGroup
 {	
 	public var name:String;
 	var nameLabel:FlxText;
-	public var merchs:Array<MerchOnPlanet>;
+	public var merchs:Map<String, MerchOnPlanet>;
 	var body:FlxSprite;
 	var selector:FlxShapeCircle;
 	var infLabel:FlxText;
@@ -35,7 +35,7 @@ class Planet extends FlxSpriteGroup
 		
 		MouseEventManager.add(this);
 		
-		merchs = new Array<MerchOnPlanet>();
+		merchs = new Map<String, MerchOnPlanet>();
 		
 		var radius:UInt = FlxRandom.intRanged(8, 24);
 		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
@@ -69,19 +69,20 @@ class Planet extends FlxSpriteGroup
 	public function work()
 	{
 		//trace(name, "work");
-		for (i in 0...merchs.length)
+		for (key in merchs.keys())
 		{
 			if (FlxRandom.chanceRoll(1))
 			{
-				var availShift = Math.ceil(merchs[i].availability / 10);
-				merchs[i].quantity += FlxRandom.intRanged( -availShift, availShift);
+				var merch = merchs[key];
+				var availShift = Math.ceil(merch.availability / 10);
+				merch.quantity += FlxRandom.intRanged( -availShift, availShift);
 				if (availShift < 0)
 				{
-					merchs[i].currentPrice *= FlxRandom.floatRanged(1, 1.125);
+					merch.currentPrice *= FlxRandom.floatRanged(1, 1.125);
 				}
 				else if (availShift > 0)
 				{
-					merchs[i].currentPrice *= FlxRandom.floatRanged(0.875, 1);
+					merch.currentPrice *= FlxRandom.floatRanged(0.875, 1);
 				}
 			}
 		}
@@ -92,7 +93,7 @@ class Planet extends FlxSpriteGroup
 	public function addMerchType(merch:MerchOnPlanet)
 	{
 		//trace("addMerc");
-		merchs.push(merch);
+		merchs[merch.name] = merch;
 		market.addMerchType(merch);
 		updateInfo();
 	}
@@ -101,10 +102,10 @@ class Planet extends FlxSpriteGroup
 	{
 		//trace("updateInfo");
 		infLabel.text = "";
-		for (i in 0...merchs.length)
+		for (key in merchs.keys())
 		{
 			//trace(i);
-			infLabel.text += merchs[i].toString() + "\n";
+			infLabel.text += merchs[key].toString() + "\n";
 		}
 		market.updateMerchs();
 	}

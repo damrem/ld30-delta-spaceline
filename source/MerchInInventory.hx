@@ -6,28 +6,39 @@ import flixel.ui.FlxButton;
  * ...
  * @author damrem
  */
-class MerchInInventory 
+class MerchInInventory extends Merch
 {
-	var inUniv:MerchInUniv;
-	var quantity:UInt;
 	public var label:FlxText;
 	public var sellButton:FlxButton;
+	var trader:Trader;
 	
-	public function new(InUniv:MerchInUniv, Quantity:UInt=0) 
+	public function new(Name:String, Quantity:UInt=0, _trader:Trader) 
 	{
-		inUniv = InUniv;
-		quantity = Quantity;
+		super(Name, Quantity);
+		
+		trader = _trader;
 		
 		label = new FlxText(0, 0, 150, "");
 		label.alignment = 'center';
 		
-		sellButton = new FlxButton(30, 0, "Sell");
+		sellButton = new FlxButton(30, 0, "Sell", sell);
 		sellButton.width = 25;
+	}
+	
+	function sell() 
+	{
+		trace("sell");
+		if (quantity > 0)
+		{
+			quantity--;
+			updateText();
+			trader.fromInventoryToMarket(this);
+		}
 	}
 	
 	public function toString():String
 	{
-		return inUniv.name + " x" + quantity;
+		return name + " x" + quantity;
 	}
 	
 	public function updateText()
