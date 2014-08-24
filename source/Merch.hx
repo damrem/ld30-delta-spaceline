@@ -1,4 +1,5 @@
 package ;
+import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 
 /**
@@ -9,11 +10,16 @@ class Merch extends FlxSpriteGroup
 {
 	public var name:String;
 	public static var refPrices:Map<String, Float> = new Map<String, Float>();
+	public var icon:FlxSprite;
 	
 	public function new(Name:String) 
 	{
 		super();
 		name = Name;
+		
+		icon = new FlxSprite(0, 0);
+		trace(name.toLowerCase());
+		icon.loadGraphic("assets/images/" + name.toLowerCase() + ".gif");
 	}
 	
 	function get_refPrice():Float 

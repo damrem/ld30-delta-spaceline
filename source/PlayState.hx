@@ -61,9 +61,10 @@ class PlayState extends FlxState
 		add(bg);
 		
 		//var food:MerchInUniv = new MerchInUniv('Food');
-		Merch.refPrices['Food'] = 100;
-		Merch.refPrices['Cloth'] = 150;
-		Merch.refPrices['Metal'] = 200;
+		Merch.refPrices['Mush'] = 100;
+		Merch.refPrices['Metal'] = 150;
+		Merch.refPrices['Weapon'] = 200;
+		Merch.refPrices['Crystal'] = 500;
 		//var fuel:MerchInUniv = new MerchInUniv('StarFuel', 250.0);
 		//var cloth:MerchInUniv = new MerchInUniv('Cloth', 150.0);
 		//var metal:MerchInUniv = new MerchInUniv('Metal', 200.0);
@@ -77,21 +78,21 @@ class PlayState extends FlxState
 		add(planets);
 
 		var planet1 = new Planet("Dhirsononn", 200, 100, trader);
-		planet1.addMerchType(new MerchOnPlanet('Cloth', 1000, trader));
-		planet1.addMerchType(new MerchOnPlanet('Food', 500, trader));
-		planet1.addMerchType(new MerchOnPlanet('Metal', 0, trader));
+		planet1.addMerchType(new MerchOnPlanet('Crystal', 100, trader));
+		planet1.addMerchType(new MerchOnPlanet('Mush', 50, trader));
+		planet1.addMerchType(new MerchOnPlanet('Metal', 10, trader));
 		planets.add(planet1);
 
 		var planet2 = new Planet("Kenti", 100, 350, trader);
-		planet2.addMerchType(new MerchOnPlanet('Metal', 1000, trader));
-		planet2.addMerchType(new MerchOnPlanet('Cloth', 200, trader));
-		planet2.addMerchType(new MerchOnPlanet('Food', 0, trader));
+		planet2.addMerchType(new MerchOnPlanet('Metal', 100, trader));
+		planet2.addMerchType(new MerchOnPlanet('Weapon', 40, trader));
+		planet2.addMerchType(new MerchOnPlanet('Mush', 20, trader));
 		planets.add(planet2);
 
 		var planet3 = new Planet("Bastion", 250, 250, trader);
-		planet3.addMerchType(new MerchOnPlanet('Food', 1000, trader));
+		planet3.addMerchType(new MerchOnPlanet('Mush', 100, trader));
 		planet3.addMerchType(new MerchOnPlanet('Metal', 50, trader));
-		planet3.addMerchType(new MerchOnPlanet('Cloth', 0, trader));
+		planet3.addMerchType(new MerchOnPlanet('Crystal', 0, trader));
 		planets.add(planet3);
 		
 		ship.setFromPlanet(planet1);
@@ -102,7 +103,7 @@ class PlayState extends FlxState
 		
 		inventory.x = FlxG.stage.stageWidth - inventory.width - 10;
 		inventory.y = 10;
-		inventory.updateFuel();
+		//inventory.updateFuel();
 		add(inventory);
 		
 		MouseEventManager.setMouseUpCallback(planet1, selectPlanet);
@@ -179,8 +180,9 @@ class PlayState extends FlxState
 		{
 			//trace("departing");
 			//trace("ship", ship);
-			ship.burnFuel(distToTravel);
-			inventory.updateFuel();
+			inventory.addCredits( -distToTravel);
+			//ship.burnFuel(distToTravel);
+			//inventory.updateFuel();
 			ship.acceleration.set(travelStep.x, travelStep.y);
 			remove(currentMarket);
 		}

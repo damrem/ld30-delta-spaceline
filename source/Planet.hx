@@ -59,10 +59,24 @@ class Planet extends FlxSpriteGroup
 		
 		infLabel = new FlxText( -50, 50, 100, "");
 		infLabel .alignment = 'center';
-		//add(infLabel);
+		add(infLabel);
+		hideInfo();
 		
 		market = new Market(this, trader);
 		market.x = market.y = 10;
+		
+		MouseEventManager.setMouseOverCallback(this, showInfo);
+		MouseEventManager.setMouseOutCallback(this, hideInfo);
+	}
+	
+	function hideInfo(?planet:Planet) 
+	{
+		infLabel.visible = false;
+	}
+	
+	function showInfo(?planet:Planet) 
+	{
+		infLabel.visible = true;
 	}
 	
 	//	merchs appear and disappear, prices change
@@ -73,9 +87,10 @@ class Planet extends FlxSpriteGroup
 		{
 			if (FlxRandom.chanceRoll(1))
 			{
-				var merch = merchs[key];
+				var merch:MerchOnPlanet = merchs[key];
 				var availShift = Math.ceil(merch.availability / 10);
 				merch.quantity += FlxRandom.intRanged( -availShift, availShift);
+				if (merch.quantity < 0)	merch.quantity = 0;
 				if (availShift < 0)
 				{
 					merch.currentPrice *= FlxRandom.floatRanged(1, 1.125);

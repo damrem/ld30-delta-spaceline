@@ -34,9 +34,7 @@ class Market extends FlxSpriteGroup
 	public function addMerchType(merch:MerchOnPlanet)
 	{
 		//trace("addMerch");
-		merch.label.color = 0x000000;
-		add(merch.label);
-		add(merch.buyButton);
+		add(merch);
 		
 		updateMerchs();
 	}
@@ -49,10 +47,11 @@ class Market extends FlxSpriteGroup
 		for (key in place.merchs.keys())
 		{
 			var merch:MerchOnPlanet = place.merchs[key];
-			merch.label.y = currentY;
-			currentY += 25;
-			merch.buyButton.y = currentY;
-			currentY += 35;
+			merch.x = 20;
+			merch.y = currentY;
+			currentY += 60;
+			//merch.buyButton.y = currentY;
+			//currentY += 35;
 			merch.updateText();
 		}
 	}

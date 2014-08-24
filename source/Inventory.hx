@@ -18,8 +18,8 @@ class Inventory extends FlxSpriteGroup
 {
 	var credits:UInt = 10000;
 	var creditLabel:FlxText;
-	var fuel:Float;
-	var fuelLabel:FlxText;
+	//var fuel:Float;
+	//var fuelLabel:FlxText;
 	var ship:Ship;
 	var size:Int = 6;
 	var stock:Array<MerchInInventory>;
@@ -40,17 +40,21 @@ class Inventory extends FlxSpriteGroup
 		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 150, 460, line, fill);
 		add(bg);
 		
-		var nameLabel:FlxText = new FlxText(10, 10, 130, "Delta Spaceline", 12);
+		var nameLabel = new FlxText(10, 10, 130, "Delta Spaceline", 12);
 		add(nameLabel);
 		
-		creditLabel = new FlxText(10, 40, 130, "", 12);
+		var coin = new FlxSprite(10, 40);
+		coin.loadGraphic("assets/images/coin.gif");
+		add(coin);
+		
+		creditLabel = new FlxText(28, 40, 130, "", 12);
 		creditLabel.color = 0x000000;
 		add(creditLabel);
 		updateCredit();
 		
-		fuelLabel = new FlxText(10, 60, 130, "", 12);
-		fuelLabel.color = 0x000000;
-		add(fuelLabel);
+		//fuelLabel = new FlxText(10, 60, 130, "", 12);
+		//fuelLabel.color = 0x000000;
+		//add(fuelLabel);
 		
 		emptySlots = new FlxSpriteGroup(10, 100);
 		for (i in 0...size)
@@ -89,31 +93,25 @@ class Inventory extends FlxSpriteGroup
 	
 	function updateCredit()
 	{
-		creditLabel.text = "¤" + credits;
+		creditLabel.text = "" + credits;
 	}
-	
+	/*
 	public function updateFuel()
 	{
 		//trace(fuelLabel, ship);
 		fuelLabel.text = "StarFuel x" + ship.fuel;
 	}
+	*/
 	
 	public function updateMerchs()
 	{
 		trace("updateMerchs");
 		merchList.clear();
-		//var currentY = 0;
-		
-		trace(stock.length);
 		
 		for (i in 0...stock.length)
 		{
-			trace("------");
-			trace("i",i);
 			var merch:MerchInInventory = stock[i];
 			
-			trace(merch.name);
-			trace(merch);
 			merch.x = i % 2 * 70;
 			merch.y = Math.floor(i/2)*70;
 			
@@ -121,7 +119,6 @@ class Inventory extends FlxSpriteGroup
 			//currentY += 35;
 			merchList.add(merch);
 			//merchList.add(merch.sellButton);
-			trace("------");
 		}
 	}
 	
