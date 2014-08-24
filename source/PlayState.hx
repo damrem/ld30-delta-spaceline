@@ -79,8 +79,79 @@ class PlayState extends FlxState
 		
 		planets = new FlxSpriteGroup(150, 0, 10000);
 		add(planets);
-
+		
+		var names = [
+			"Ban",
+			"Kenti",
+			"Dhirsononn",
+			"Oflag",
+			"Lekkos",
+			"Arch",
+			"Benthis",
+			"Krass",
+			"Bastion",
+			"Humus",
+			"Kron",
+			"Warlus",
+			"Adansonia",
+			"Calanque",
+			"Palafitte",
+			"Primon",
+			"Balunkri",
+			"Mekyeff",
+			"Magyalai",
+			"Sundh'Bal",
+			"Zeehen",
+			"Chasm",
+			"Lithiq",
+			"Palud",
+			"Hobah",
+			"Hypogea"
+		];
+		names = FlxRandom.shuffleArray(names, names.length * 3);
+		var listPlanets = new Array<Planet>();
+		var i:UInt = 0;
+		for (col in 0...3)
+		{
+			for (row in 0...4)
+			{
+				if (FlxRandom.chanceRoll(75))
+				{
+					trace(i);
+					var left = Std.int(col * 330 / 3) + 30;
+					var right = Std.int((col+1) * 340 / 3) - 30;
+					var X = FlxRandom.intRanged(left, right);
+					
+					var top = Std.int(row * 440 / 4) + 30;
+					var down = Std.int((row+1) * 480 / 4) - 30;
+					var Y = FlxRandom.intRanged(top, down);
+					
+					var planet = new Planet(names[i], X, Y);
+					planet.downlight();
+					planet.addMerchType(new MerchOnPlanet('Food', FlxRandom.intRanged(1, 25)));
+					planet.addMerchType(new MerchOnPlanet('Metal', FlxRandom.intRanged(0, 20)));
+					planet.addMerchType(new MerchOnPlanet('Weapon', FlxRandom.intRanged(0, 10)));
+					planet.addMerchType(new MerchOnPlanet('Crystal', FlxRandom.intRanged(0, 5)));
+					planets.add(planet);
+					MouseEventManager.setMouseUpCallback(planet, selectPlanet);
+					listPlanets.push(planet);
+					i++;
+				}
+			}
+		}
+		
+		var nbPlanets = FlxRandom.intRanged(8, 12);
+		
+		for (i in 0...nbPlanets)
+		{
+			
+			
+			
+			
+		}
+/*
 		var planet1 = new Planet("Dhirsononn", 200, 100);
+		planet1.downlight();
 		planet1.addMerchType(new MerchOnPlanet('Food', 50));
 		planet1.addMerchType(new MerchOnPlanet('Metal', 10));
 		planet1.addMerchType(new MerchOnPlanet('Weapon', 0));
@@ -89,7 +160,7 @@ class PlayState extends FlxState
 		MouseEventManager.setMouseUpCallback(planet1, selectPlanet);
 
 		var planet2 = new Planet("Kenti", 100, 350);
-		planet2.alpha = 0.25;
+		planet2.downlight();
 		planet2.addMerchType(new MerchOnPlanet('Food', 20));
 		planet2.addMerchType(new MerchOnPlanet('Metal', 100));
 		planet2.addMerchType(new MerchOnPlanet('Weapon', 40));
@@ -98,18 +169,20 @@ class PlayState extends FlxState
 		MouseEventManager.setMouseUpCallback(planet2, selectPlanet);
 
 		var planet3 = new Planet("Bastion", 250, 250);
-		planet3.alpha = 0.25;
+		planet3.downlight();
 		planet3.addMerchType(new MerchOnPlanet('Food', 100));
 		planet3.addMerchType(new MerchOnPlanet('Metal', 50));
 		planet3.addMerchType(new MerchOnPlanet('Weapon', 00));
 		planet3.addMerchType(new MerchOnPlanet('Crystal', 0));
 		planets.add(planet3);
 		MouseEventManager.setMouseUpCallback(planet3, selectPlanet);
-		
-		ship.setFromPlanet(planet1);
+		*/
+		listPlanets = FlxRandom.shuffleArray(listPlanets, listPlanets.length * 3);
+		ship.setFromPlanet(listPlanets[0]);
 		add(ship);
-		currentPlanet = planet1;
-		market.setPlanet(planet1);
+		currentPlanet = listPlanets[0];
+		currentPlanet.hightlight();
+		market.setPlanet(listPlanets[0]);
 		
 		
 		
@@ -162,7 +235,7 @@ class PlayState extends FlxState
 	
 	function tick()
 	{
-		//planets.callAll('work');
+		planets.callAll('work');
 	}
 	
 	function moveShip()
@@ -195,7 +268,7 @@ class PlayState extends FlxState
 			inventory.addCredits( -distToTravel);
 			ship.acceleration.set(travelStep.x, travelStep.y);
 			market.visible = false;
-			currentPlanet.alpha = 0.25;
+			currentPlanet.downlight();
 		}
 		//	arriving
 		else if(travelledDist > distToTravel)
@@ -206,7 +279,7 @@ class PlayState extends FlxState
 			ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);
 			ship.fromPlanet = ship.toPlanet;
 			currentPlanet = ship.toPlanet;
-			currentPlanet.alpha = 1.0;
+			currentPlanet.hightlight();
 			market.setPlanet(currentPlanet);
 			market.visible = true;
 		}

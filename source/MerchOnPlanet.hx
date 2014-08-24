@@ -32,7 +32,7 @@ class MerchOnPlanet extends Merch
 		currentPrice = refPrice * FlxRandom.floatRanged(0.75, 1.25);
 		availability = Avalaibility;
 		quantity = Std.int(availability * FlxRandom.floatRanged(0.75, 1.25));
-		trace("quantity", quantity);
+		//trace("quantity", quantity);
 		
 		nameLabel = new FlxText(30, 12, 120, "");
 		nameLabel.color = 0x000000;
@@ -72,21 +72,21 @@ class MerchOnPlanet extends Merch
 	
 	function buy(button:FlxSpriteGroup) 
 	{
-		trace("buy");
-		trace("quantity", quantity, name);
+		//trace("buy");
+		//trace("quantity", quantity, name);
 		if (quantity > 0)
 		{
-			trace("quantity ok");
-			trace("trader", _trader);
+			//trace("quantity ok");
+			//trace("trader", _trader);
 			if (_trader.fromMarketToInventory(this))
 			{
-				trace("space and credit ok");
+				//trace("space and credit ok");
 				quantity --;
 				updateText();
 			}
 		}
 		
-		trace(PlayState.currentPlanet.name);
+		//trace(PlayState.currentPlanet.name);
 		
 	}
 	
@@ -97,7 +97,7 @@ class MerchOnPlanet extends Merch
 	
 	public function updateText()
 	{
-		trace("updateText");
+		//trace("updateText");
 		nameLabel.text = name + " x" + quantity;
 		priceLabel.text = "" + Std.int(currentPrice);
 		if (quantity == 0)

@@ -21,7 +21,7 @@ class Planet extends FlxSpriteGroup
 	public var name:String;
 	var nameLabel:FlxText;
 	public var merchsByName:Map<String, MerchOnPlanet>;
-	var body:FlxSprite;
+	var body:FlxSpriteGroup;
 	var selector:FlxShapeCircle;
 	//var infLabel:FlxText;
 	
@@ -40,11 +40,12 @@ class Planet extends FlxSpriteGroup
 		
 		var radius:UInt = FlxRandom.intRanged(8, 24);
 		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
-		body = new FlxShapeCircle( -radius, -radius, radius, { thickness:0, color:color }, { hasFill:true, color:color } );
+		body = new FlxSpriteGroup();
+		body.add(new FlxShapeCircle( -radius, -radius, radius, { thickness:0, color:color }, { hasFill:true, color:color } ));
 		centerOrigin();
+		body.add(new FlxShapeCircle( Std.int( -radius * 0.875), Std.int( -radius * 0.875), Std.int(radius * 0.75), { thickness:0, color:0x40ffffff }, { hasFill:true, color:0x40ffffff } ));
+		body.add(new FlxShapeCircle( Std.int(-radius*0.6875), Std.int(-radius*0.6875), Std.int(radius*0.5), { thickness:0, color:0x40ffffff }, { hasFill:true, color:0x40ffffff } ));
 		add(body);
-		add(new FlxShapeCircle( Std.int( -radius * 0.875), Std.int( -radius * 0.875), Std.int(radius * 0.75), { thickness:0, color:0x40ffffff }, { hasFill:true, color:0x40ffffff } ));
-		add(new FlxShapeCircle( Std.int(-radius*0.6875), Std.int(-radius*0.6875), Std.int(radius*0.5), { thickness:0, color:0x40ffffff }, { hasFill:true, color:0x40ffffff } ));
 		//trace("body", body);
 		//origin.x = 8;
 		//origin.y = 8;
@@ -120,9 +121,20 @@ class Planet extends FlxSpriteGroup
 		updateInfo();
 	}
 	
+	public function downlight() 
+	{
+		body.alpha = nameLabel.alpha = 0.25;
+		
+	}
+	
+	public function hightlight() 
+	{
+		body.alpha = nameLabel.alpha = 1.0;
+	}
+	
 	private function updateInfo()
 	{
-		trace("updateInfo");
+		//trace("updateInfo");
 		//infLabel.text = "";
 		/*
 		for (key in merchsByName.keys())
@@ -152,11 +164,11 @@ class Planet extends FlxSpriteGroup
 			trend.x = 30;
 			trend.y = currentY + 2;
 			
-			trace("trend", trend);
+			//trace("trend", trend);
 			info.add(trend);
 			
-			trace("icon", icon);
-			trace("info", info);
+			//trace("icon", icon);
+			//trace("info", info);
 			//info.add(new FlxText(10, currentY, 80, merch.icon));
 			currentY += 20;
 		}
