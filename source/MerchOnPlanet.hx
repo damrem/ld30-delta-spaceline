@@ -19,6 +19,8 @@ class MerchOnPlanet extends Merch
 	public var buyButton:FlxSpriteGroup;
 	public var onBuy:Void->Void;
 	var _trader:Trader;
+	var trendIcon:FlxSprite;
+	var trendHolder:FlxSpriteGroup;
 	public var quantity:Int;
 	
 	public function new(Name:String, Avalaibility:UInt)
@@ -35,6 +37,9 @@ class MerchOnPlanet extends Merch
 		nameLabel = new FlxText(30, 12, 120, "");
 		nameLabel.color = 0x000000;
 		add(nameLabel);
+		
+		trendHolder = new FlxSpriteGroup(30, 35);
+		add(trendHolder);
 		
 		priceLabel = new FlxText(16, 35, 50, "");
 		priceLabel.alignment = 'right';
@@ -103,18 +108,29 @@ class MerchOnPlanet extends Merch
 		{
 			alpha = 1.0;
 		}
+		trendHolder.remove(trendIcon);
+		trendIcon = getTrendIcon();
+		trendHolder.add(trendIcon);
 	}
 	
 	public function getTrendIcon():FlxSprite
 	{
 		var trend = new FlxSprite();
-		if (currentPrice > refPrice * 1.1)
+		if (currentPrice > refPrice * 1.2)
+		{
+			trend.loadGraphic("assets/images/upup.gif");
+		}
+		else if (currentPrice > refPrice * 1.1)
 		{
 			trend.loadGraphic("assets/images/up.gif");
 		}
 		else if (currentPrice < refPrice * 0.9)
 		{
 			trend.loadGraphic("assets/images/dn.gif");
+		}
+		else if (currentPrice < refPrice * 0.8)
+		{
+			trend.loadGraphic("assets/images/dndn.gif");
 		}
 		else
 		{
