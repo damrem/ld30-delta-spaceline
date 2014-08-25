@@ -42,8 +42,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		FlxG.sound.playMusic("assets/music/Space Machine A.mp3");
-		FlxG.sound.muteKeys = ["m", "M", "0"];
+		
 		
 		MouseEventManager.init();
 		

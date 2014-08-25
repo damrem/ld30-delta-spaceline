@@ -28,6 +28,9 @@ class MenuState extends FlxState
 		//trace("create");
 		super.create();
 		
+		FlxG.sound.playMusic("assets/music/Space Machine A.mp3");
+		FlxG.sound.muteKeys = ["m", "M", "0"];
+		
 		var bg:FlxSpriteGroup = new FlxSpriteGroup();
 		
 		bg.add(new FlxShapeBox(0, 0, 640, 480, 
@@ -56,7 +59,7 @@ class MenuState extends FlxState
 		//title.color = 0xffff00;
 		add(subtitle);
 		
-		var credits = new FlxText(0, 450, 640, "Made in 72h by @damrem for Ludum Dare 30: 'Connected Worlds'.\nMusic by Kevin MacLeod - Incompetech.com");
+		var credits = new FlxText(0, 450, 640, "Made in 72h by @damrem for Ludum Dare 30: 'Connected Worlds'.\nSome graphics by Arachne on TIGsource - Music by Kevin MacLeod - Incompetech.com");
 		credits.alignment = 'center';
 		add(credits);
 		
