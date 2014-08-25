@@ -244,7 +244,7 @@ class PlayState extends FlxState
 		{
 			//trace("departing");
 			//trace("ship", ship);
-			inventory.addCredits( -distToTravel);
+			inventory.addCredits( Std.int(-distToTravel/2));
 			ship.acceleration.set(travelStep.x, travelStep.y);
 			ship.angle = 0;
 			market.visible = false;

@@ -107,7 +107,7 @@ class Planet extends FlxSpriteGroup
 				var merch:MerchOnPlanet = merchsByName[key];
 				
 				merch.quantity += FlxRandom.intRanged( -1, 1);
-				if (merch.quantity < 0)	merch.quantity *= -1;
+				if (merch.quantity < 0)	merch.quantity = 0;
 				
 				merch.currentPrice += FlxRandom.floatRanged( -5.0, 5.0);
 				if (merch.currentPrice < 0)	merch.currentPrice = merch.refPrice;
