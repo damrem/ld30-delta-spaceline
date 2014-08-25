@@ -49,25 +49,28 @@ class MenuState extends FlxState
 		}
 		add(bg);
 		
-		var title = new FlxText(0, 100, 640, "Delta Spaceline", 32);
+		var title = new FlxText(0, 75, 640, "DELTA SPACELINE", 32);
 		title.alignment = 'center';
 		title.color = 0xffff00;
 		add(title);
 		
-		var subtitle = new FlxText(0, 140, 640, "A space trading game. ", 12);
+		var subtitle = new FlxText(0, 115, 640, "A space trading game.", 12);
 		subtitle.alignment = 'center';
 		//title.color = 0xffff00;
 		add(subtitle);
 		
-		var credits = new FlxText(0, 450, 640, "Made in 72h by @damrem for Ludum Dare 30: 'Connected Worlds'.\nSome graphics by Arachne on TIGsource - Music by Kevin MacLeod - Incompetech.com");
-		credits.alignment = 'center';
-		add(credits);
+		var objective = new FlxText(10, 175, FlxG.stage.stageWidth - 20, "Objective: gather 10,000     within the minimum amount of travels!", 12);
+		objective.alignment = 'center';
+		add(objective);
 		
-		var help = new FlxText(0, 185, 640, "Click to Start - M: Mute", 16);
+		var coin = new FlxSprite(257, objective.y);
+		coin.loadGraphic("assets/images/coin.gif");
+		
+		var help = new FlxText(0, 250, 640, "Click to Start - M: Mute", 16);
 		help.alignment = 'center';
 		add(help);
 		
-		var tutorial = new FlxText(200, 250, 440, "Travel aboard your ship by clicking on planets!\nTrade merchandises!\nCheck price trends!\nBuy cheap!\nSell hard!\nCarry passengers to optimize your moves!\nGather a lot of Zollars!", 12);
+		var tutorial = new FlxText(200, 325, 440, "Travel aboard your ship by clicking on planets!\nTrade merchandises!\nCheck price trends!\nBuy cheap!\nSell hard!\nCarry passengers to optimize your moves!", 12);
 		
 		var ship = new FlxSprite(tutorial.x - 18, tutorial.y - 12);
 		ship.loadGraphic("assets/images/ship.gif", true, 16, 32);
@@ -121,8 +124,11 @@ class MenuState extends FlxState
 		var passenger = new FlxSprite(tutorial.x - 18, tutorial.y + 75);
 		passenger.loadGraphic("assets/images/passenger.gif");
 		
-		var coin = new FlxSprite(tutorial.x - 18, tutorial.y + 92);
-		coin.loadGraphic("assets/images/coin.gif");
+		var credits = new FlxText(0, 450, 640, "Made in 72h by @damrem for Ludum Dare 30: 'Connected Worlds'.\nSome graphics by Arachne on TIGsource - Music by Kevin MacLeod - Incompetech.com");
+		credits.alignment = 'center';
+		add(credits);
+		
+		
 		
 		add(tutorial);
 		add(ship);

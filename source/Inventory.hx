@@ -3,6 +3,7 @@ import flash.display.CapsStyle;
 import flash.display.JointStyle;
 import flash.display.LineScaleMode;
 import flixel.addons.display.shapes.FlxShapeBox;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxTypedSpriteGroup;
@@ -16,7 +17,8 @@ import flixel.util.FlxSpriteUtil.LineStyle;
  */
 class Inventory extends FlxSpriteGroup
 {
-	var credits:UInt = 5000;
+	var nbTravels:UInt;
+	var nbCredits:UInt = 2500;
 	var creditLabel:FlxText;
 	//var fuel:Float;
 	//var fuelLabel:FlxText;
@@ -26,6 +28,7 @@ class Inventory extends FlxSpriteGroup
 	var slots:FlxSpriteGroup;
 	var emptySlots:FlxSpriteGroup;
 	static var _single:Inventory;
+	var travelLabel:FlxText;
 	//var passengers:Array<Passenger>;
 	
 	public function new(_ship:Ship) 
@@ -61,11 +64,20 @@ class Inventory extends FlxSpriteGroup
 		add(creditLabel);
 		updateCredit();
 		
+		var travel = new FlxSprite(10, 62);
+		travel.loadGraphic("assets/images/travel.gif");
+		add(travel);
+		
+		travelLabel = new FlxText(28, 60, 75, "", 12);
+		travelLabel.color = 0x000000;
+		add(travelLabel);
+		updateTravels();
+		
 		//fuelLabel = new FlxText(10, 60, 130, "", 12);
 		//fuelLabel.color = 0x000000;
 		//add(fuelLabel);
 		
-		emptySlots = new FlxSpriteGroup(0, 75);
+		emptySlots = new FlxSpriteGroup(0, 100);
 		for (i in 0...size)
 		{
 			var X = i % 2 * 70;
@@ -74,10 +86,15 @@ class Inventory extends FlxSpriteGroup
 		}
 		add(emptySlots);
 		
-		slots = new FlxSpriteGroup(0, 75);
+		slots = new FlxSpriteGroup(emptySlots.x, emptySlots.y);
 		add(slots);
 		
 		
+	}
+	
+	function updateTravels() 
+	{
+		travelLabel.text = "" + nbTravels;
 	}
 	
 	function isFull()
@@ -89,9 +106,9 @@ class Inventory extends FlxSpriteGroup
 	public function buyMerch(name:String, price:Float):Bool
 	{
 		//trace("buyMerch");
-		if (price <= credits && !isFull())
+		if (price <= nbCredits && !isFull())
 		{
-			credits -= Std.int(price);
+			nbCredits -= Std.int(price);
 			updateCredit();
 			
 			slots.add(new MerchInInventory(name));
@@ -148,15 +165,20 @@ class Inventory extends FlxSpriteGroup
 	
 	
 	
-	public function addCredits(Credits:UInt)
+	public function addCredits(earning:UInt)
 	{
-		credits += Credits;
+		nbCredits += earning;
 		updateCredit();
+		if (nbCredits >= 10000)
+		{
+			//var victory = new VictoryState(nbTravels);
+			FlxG.switchState(new VictoryState(nbTravels));
+		}
 	}
 	
 	function updateCredit()
 	{
-		creditLabel.text = "" + credits;
+		creditLabel.text = "" + nbCredits;
 	}
 	/*
 	public function updateFuel()
@@ -201,6 +223,12 @@ class Inventory extends FlxSpriteGroup
 				return;
 			}
 		}
+	}
+	
+	public function addTravels() 
+	{
+		nbTravels++;
+		updateTravels();
 	}
 	
 	static function get_single():Inventory 

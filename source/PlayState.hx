@@ -274,6 +274,7 @@ class PlayState extends FlxState
 			ship.isTravelling = true;
 			
 			inventory.addCredits( Std.int( -distToTravel / 2));
+			inventory.addTravels();
 			market.visible = false;
 			currentPlanet.downlight();
 			
