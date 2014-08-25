@@ -113,19 +113,19 @@ class PlayState extends FlxState
 		names = FlxRandom.shuffleArray(names, names.length * 3);
 		var listPlanets = new Array<Planet>();
 		var i:UInt = 0;
-		for (col in 0...3)
+		for (col in 0...4)
 		{
 			for (row in 0...4)
 			{
-				if (FlxRandom.chanceRoll(75))
+				if (FlxRandom.chanceRoll(66.7))
 				{
 					//trace(i);
-					var left = Std.int(col * 330 / 3) + 30;
-					var right = Std.int((col+1) * 340 / 3) - 30;
+					var left = Std.int(col * 400 / 4) + 20;
+					var right = Std.int((col+1) * 400 / 4) - 20;
 					var X = FlxRandom.intRanged(left, right);
 					
-					var top = Std.int(row * 440 / 4) + 30;
-					var down = Std.int((row+1) * 480 / 4) - 30;
+					var top = Std.int(row * 440 / 4) + 20;
+					var down = Std.int((row+1) * 440 / 4) - 20;
 					var Y = FlxRandom.intRanged(top, down);
 					
 					var planet = new Planet(names[i], X, Y);
@@ -207,8 +207,8 @@ class PlayState extends FlxState
 		
 		moveShip();
 		
-		space.x = ( - (FlxG.mouse.x - 320) / 10);
-		space.y = ( - (FlxG.mouse.y - 240) / 10);
+		space.x = ( - (FlxG.mouse.x - 320) / 2.5);
+		space.y = ( - (FlxG.mouse.y - 240) / 2.5);
 	}
 	
 	function tick()

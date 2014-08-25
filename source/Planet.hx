@@ -45,6 +45,7 @@ class Planet extends FlxSpriteGroup
 		
 		var radius:UInt = FlxRandom.intRanged(8, 24);
 		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
+		add(new FlxShapeCircle( -radius, -radius, radius, { thickness:0, color:0xff000000 }, { hasFill:true, color:0xff000000 } ));
 		body = new FlxSpriteGroup();
 		body.add(new FlxShapeCircle( -radius, -radius, radius, { thickness:0, color:color }, { hasFill:true, color:color } ));
 		centerOrigin();
