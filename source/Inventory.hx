@@ -43,10 +43,11 @@ class Inventory extends FlxSpriteGroup
 		
 		var line:LineStyle = { thickness:1 };
 		var fill:FillStyle = { hasFill:true, color:0x80ffffff, alpha:0.5 };
-		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 150, 460, line, fill);
+		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 130, 460, line, fill);
 		add(bg);
 		
-		var nameLabel = new FlxText(10, 10, 130, "Delta Spaceline", 12);
+		var nameLabel = new FlxText(0, 10, 130, "Delta Spaceline", 12);
+		nameLabel.alignment = 'center';
 		add(nameLabel);
 		
 		var coin = new FlxSprite(10, 40);
@@ -62,7 +63,7 @@ class Inventory extends FlxSpriteGroup
 		//fuelLabel.color = 0x000000;
 		//add(fuelLabel);
 		
-		emptySlots = new FlxSpriteGroup(10, 100);
+		emptySlots = new FlxSpriteGroup(0, 75);
 		for (i in 0...size)
 		{
 			var X = i % 2 * 70;
@@ -71,7 +72,7 @@ class Inventory extends FlxSpriteGroup
 		}
 		add(emptySlots);
 		
-		merchList = new FlxSpriteGroup(10, 100);
+		merchList = new FlxSpriteGroup(0, 75);
 		add(merchList);
 		
 		
@@ -117,6 +118,7 @@ class Inventory extends FlxSpriteGroup
 	public function updateMerchs()
 	{
 		trace("updateMerchs");
+		
 		merchList.clear();
 		
 		for (i in 0...stock.length)
@@ -140,6 +142,8 @@ class Inventory extends FlxSpriteGroup
 		{
 			if (stock[i].name == name)
 			{
+				merchList.remove(stock[i]);
+				stock[i].destroy();
 				stock.splice(i, 1);
 				updateMerchs();
 				return;

@@ -79,12 +79,14 @@ class Planet extends FlxSpriteGroup
 	function hideInfo(?planet:Planet) 
 	{
 		info.visible = false;
+		if(PlayState.currentPlanet!=this)	downlight();
 		//infLabel.visible = false;
 	}
 	
 	function showInfo(?planet:Planet) 
 	{
 		info.visible = true;
+		if(PlayState.currentPlanet!=this)	hightlight(0.5);
 		//infLabel.visible = true;
 	}
 	
@@ -94,7 +96,7 @@ class Planet extends FlxSpriteGroup
 		//trace(name, "work");
 		for (key in merchsByName.keys())
 		{
-			if (FlxRandom.chanceRoll(1))
+			if (FlxRandom.chanceRoll(5))
 			{
 				var merch:MerchOnPlanet = merchsByName[key];
 				var availShift = Math.ceil(merch.availability / 10);
@@ -127,9 +129,9 @@ class Planet extends FlxSpriteGroup
 		
 	}
 	
-	public function hightlight() 
+	public function hightlight(intensity=1.0) 
 	{
-		body.alpha = nameLabel.alpha = 1.0;
+		body.alpha = nameLabel.alpha = intensity;
 	}
 	
 	private function updateInfo()
@@ -163,6 +165,11 @@ class Planet extends FlxSpriteGroup
 			var trend = merch.getTrendIcon();
 			trend.x = 30;
 			trend.y = currentY + 2;
+			
+			if (merch.quantity == 0)
+			{
+				icon.alpha = trend.alpha = 0.25;
+			}
 			
 			//trace("trend", trend);
 			info.add(trend);

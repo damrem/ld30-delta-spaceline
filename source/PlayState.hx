@@ -9,6 +9,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
+import flixel.input.keyboard.FlxKey;
 import flixel.plugin.MouseEventManager;
 import flixel.util.FlxBitmapUtil;
 import flixel.util.FlxMath;
@@ -36,6 +37,9 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		
+		//FlxG.sound.playMusic("assets/music/Space Machine A.mp3");
+		FlxG.sound.muteKeys = ["m", "M", "0"];
 		
 		MouseEventManager.init();
 		
@@ -134,6 +138,8 @@ class PlayState extends FlxState
 					planet.addMerchType(new MerchOnPlanet('Crystal', FlxRandom.intRanged(0, 5)));
 					planets.add(planet);
 					MouseEventManager.setMouseUpCallback(planet, selectPlanet);
+					//MouseEventManager.setMouseOverCallback(planet, planet.hightlight);
+					//MouseEventManager.setMouseOutCallback(planet, planet.downlight);
 					listPlanets.push(planet);
 					i++;
 				}
@@ -222,6 +228,13 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		
+		if (FlxG.keys.justPressed.M) 
+		{
+		}
+		
+		
+		
 		
 		t_sec = Lib.getTimer() / 1000;
 		if (Math.floor(t_sec) > t_lastFullSec)
