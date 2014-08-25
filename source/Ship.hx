@@ -17,7 +17,7 @@ class Ship extends FlxSprite
 	public var fromPlanet:Planet;
 	public var toPlanet:Planet;
 	public var fuel:Float;
-	private var _isTravelling:Bool;
+	public var isTravelling:Bool;
 	
 	public function new() 
 	{
@@ -60,11 +60,30 @@ class Ship extends FlxSprite
 		fromPlanet = toPlanet = FromPlanet;
 	}
 	
+	public function land() 
+	{
+		setGraphicSize(8, 16);
+		offset.x = -16;
+		offset.y = 16;
+		animation.play('static');
+	}
+	
+	public function takeOff() 
+	{
+		setGraphicSize(16, 32);
+		angle = 0;
+		offset.x = offset.y = 0;
+		animation.play('burst');
+	}
+	
+	/*
 	function get_isTravelling():Bool
 	{
 		return velocity.x != 0 && velocity.y != 0;
 	}
 	
 	public var isTravelling(get_isTravelling, null):Bool;
+	*/
+	
 	
 }

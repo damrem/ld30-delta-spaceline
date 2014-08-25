@@ -158,6 +158,7 @@ class PlayState extends FlxState
 		listPlanets = FlxRandom.shuffleArray(listPlanets, listPlanets.length * 3);
 		ship.setFromPlanet(listPlanets[0]);
 		space.add(ship);
+		//ship.land();
 		currentPlanet = listPlanets[0];
 		currentPlanet.hightlight();
 		market.setPlanet(listPlanets[0]);
@@ -247,6 +248,11 @@ class PlayState extends FlxState
 		
 		//if the ship is departing, we use the energy necessary to the trip
 		var travelledDist = FlxMath.distanceBetween(ship.fromPlanet, ship);
+		var remainingDist = FlxMath.distanceBetween(ship.toPlanet, ship);
+		var halfWay = FlxVector.get((ship.toPlanet.x - ship.fromPlanet.x) / 2, (ship.toPlanet.y - ship.fromPlanet.y) / 2);
+		
+		var halfRemaining = FlxVector.get(halfWay.x - ship.x , halfWay.y - ship.y);
+		
 		
 		//trace("travelledDist", travelledDist);
 		//trace(ship.fromPlanet.x, ship.fromPlanet.y, ship.fromPlanet.origin);
@@ -257,40 +263,57 @@ class PlayState extends FlxState
 		//trace("distToTravel", distToTravel);
 		
 		var travelStep = FlxVector.get(ship.toPlanet.x - ship.fromPlanet.x, ship.toPlanet.y - ship.fromPlanet.y);
-		//travelStep.scale(4);
+		travelStep.length = 150;
+		//travelStep.scale(1);
 		//trace("travelStep", travelStep);
+		
+		//ship.acceleration.set(halfRemaining.x, halfRemaining.y);
 		
 		//	departing
 		if (!ship.isTravelling && ship.fuel >= distToTravel)
 		{
-			//trace("departing");
-			//trace("ship", ship);
-			inventory.addCredits( Std.int(-distToTravel/2));
-			ship.acceleration.set(travelStep.x, travelStep.y);
-			ship.angle = 0;
+			ship.isTravelling = true;
+			
+			inventory.addCredits( Std.int( -distToTravel / 2));
 			market.visible = false;
 			currentPlanet.downlight();
-			ship.animation.play('burst');
-			ship.setGraphicSize(16, 32);
-			//FlxTween.tween(ship.scale, { x:1.0, y:1.0 }, 0.5, { update:traceCallback } );
+			
+			
+			//ship.acceleration.set(travelStep.x, travelStep.y);
+			ship.velocity.set(travelStep.x, travelStep.y);
+			
+			ship.takeOff();
+			
 			
 		}
+		/*
+		else if(ship.isTravelling)
+		{
+			//	travelling
+			ship.x += travelStep.x;
+			ship.y += travelStep.y;
+		}
+		*/
 		//	arriving
 		else if(travelledDist > distToTravel)
 		{
-			//trace("arriving");
+			trace("arriving");
+			ship.isTravelling = false;
+			
+			//ship.acceleration.x *= -1; 
+			//ship.acceleration.y *= -1; 
 			ship.acceleration.set(0, 0);
 			ship.velocity.set(0, 0);
-			//ship.angle = 90;
-			//ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);
-			//FlxTween.tween(ship.scale, { x: 0.5, y:0.5}, 0.5, {update:traceCallback} );
-			ship.setGraphicSize(8, 16);
+			
+			ship.land();
+			
 			ship.fromPlanet = ship.toPlanet;
 			currentPlanet = ship.toPlanet;
 			currentPlanet.hightlight();
 			market.setPlanet(currentPlanet);
 			market.visible = true;
-			ship.animation.play('static');
+			
+
 			Inventory.single.removePassenger(currentPlanet);
 			workOnOtherPlanets(currentPlanet);
 		}
