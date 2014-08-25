@@ -46,21 +46,30 @@ class MenuState extends FlxState
 		}
 		add(bg);
 		
-		var title = new FlxText(125, 100, 440, "Delta Spaceline", 32);
+		var title = new FlxText(0, 100, 640, "Delta Spaceline", 32);
+		title.alignment = 'center';
 		title.color = 0xffff00;
 		add(title);
 		
-		var credits = new FlxText(125, 140, 440, "A space trading game. #LD48 LD#30 entry by @damrem on theme 'Connected Worlds'.\nMusic by Kevin MacLeod - Incompetech.com");
+		var subtitle = new FlxText(0, 140, 640, "A space trading game. ", 12);
+		subtitle.alignment = 'center';
+		//title.color = 0xffff00;
+		add(subtitle);
+		
+		var credits = new FlxText(0, 450, 640, "Made in 72h by @damrem for Ludum Dare 30: 'Connected Worlds'.\nMusic by Kevin MacLeod - Incompetech.com");
+		credits.alignment = 'center';
 		add(credits);
 		
-		var help = new FlxText(125, 170, 440, "Click to Start - M: Mute", 12);
+		var help = new FlxText(0, 185, 640, "Click to Start - M: Mute", 16);
+		help.alignment = 'center';
 		add(help);
 		
-		var tutorial = new FlxText(125, 200, 440, "Travel aboard your ship by clicking on planets.\nTrade merchandises:\nCheck price trends...\nbuy cheap...\nsell hard...\nand make good money!", 12);
+		var tutorial = new FlxText(200, 250, 440, "Travel aboard your ship by clicking on planets!\nTrade merchandises!\nCheck price trends!\nBuy cheap!\nSell hard!\nCarry passengers to optimize your moves!\nGather a lot of Zollars!", 12);
 		
+		var ship = new FlxSprite(tutorial.x - 18, tutorial.y - 12);
+		ship.loadGraphic("assets/images/ship.gif", true, 16, 32);
 		
 		var merchs = new FlxSpriteGroup(tutorial.x - 77, tutorial.y + 16);
-		
 		
 		var trends = new FlxSpriteGroup(tutorial.x - 87, tutorial.y + 34);
 				
@@ -106,14 +115,19 @@ class MenuState extends FlxState
 		crystal.loadGraphic("assets/images/crystal.gif");
 		merchs.add(crystal);
 		
-		var coin = new FlxSprite(tutorial.x - 18, tutorial.y + 77);
+		var passenger = new FlxSprite(tutorial.x - 18, tutorial.y + 75);
+		passenger.loadGraphic("assets/images/passenger.gif");
+		
+		var coin = new FlxSprite(tutorial.x - 18, tutorial.y + 92);
 		coin.loadGraphic("assets/images/coin.gif");
 		
 		add(tutorial);
+		add(ship);
 		add(merchs);
 		add(trends);
 		add(t1b);
 		add(t5b);
+		add(passenger);
 		add(coin);
 		
 		MouseEventManager.init();

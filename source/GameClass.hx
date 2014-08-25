@@ -1,6 +1,7 @@
 package ;
 
 import flash.Lib;
+import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 
@@ -8,7 +9,7 @@ class GameClass extends FlxGame
 {
 	var gameWidth:Int = 640; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 480; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var initialState:Class<FlxState> = PlayState; // The FlxState the game starts with.
+	var initialState:Class<FlxState> = MenuState; // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = false; // Whether to skip the flixel splash screen that appears in release mode.
@@ -21,6 +22,8 @@ class GameClass extends FlxGame
 	{
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
+		
+		
 
 		if (zoom == -1)
 		{
@@ -32,5 +35,7 @@ class GameClass extends FlxGame
 		}
 
 		super(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+		
+		//FlxG.mouse.useSystemCursor = true;
 	}
 }
