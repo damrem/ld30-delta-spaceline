@@ -121,14 +121,14 @@ class Inventory extends FlxSpriteGroup
 	
 	public function removePassenger(to:Planet)
 	{
-		trace("removePassenger");
+		//trace("removePassenger");
 		//for (var i:UInt = 0; i < slots.members.length; i++ )
 		var i:Int = 0;
 		while(i < slots.members.length)
 		{
 			var item:Item = cast(slots.members[i]);
-			trace("slots.members[i]", slots.members[i]);
-			trace("item", item);
+			//trace("slots.members[i]", slots.members[i]);
+			//trace("item", item);
 			if (item.name == 'passenger')
 			{
 				var passenger:Passenger = cast(item);
@@ -168,14 +168,14 @@ class Inventory extends FlxSpriteGroup
 	
 	function updateSlots()
 	{
-		trace("updateSlots");
+		//trace("updateSlots");
 		
 		//slots.clear();
 		
 		for (i in 0...slots.members.length)
 		{
 			var item:Item = cast(slots.members[i]);
-			trace(item.name);
+			//trace(item.name);
 			
 			item.x = i % 2 * 70;
 			item.y = Math.floor(i/2)*70;

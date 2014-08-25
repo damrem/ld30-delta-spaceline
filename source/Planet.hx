@@ -26,10 +26,10 @@ class Planet extends FlxSpriteGroup
 	var body:FlxSpriteGroup;
 	var selector:FlxShapeCircle;
 	//var infLabel:FlxText;
-	public var onUpdate:FlxSignal;
+	public var onUpdateInfo:FlxSignal;
 	
 	var colors:Array<UInt> = [0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffff00, 0xffff00ff, 0xff00ffff];
-	var info:flixel.group.FlxSpriteGroup;
+	public var info:FlxSpriteGroup;
 	
 	public var passengers:Array<PassengerOnPlanet>;
 	
@@ -41,7 +41,7 @@ class Planet extends FlxSpriteGroup
 		
 		MouseEventManager.add(this);
 		
-		onUpdate = new FlxSignal();
+		onUpdateInfo = new FlxSignal();
 		
 		merchsByName = new Map<String, MerchOnPlanet>();
 		
@@ -73,7 +73,7 @@ class Planet extends FlxSpriteGroup
 		
 		info = new FlxSpriteGroup();
 		
-		add(info);
+		//add(info);
 		
 		/*
 		infLabel = new FlxText( -50, 50, 100, "");
@@ -96,17 +96,17 @@ class Planet extends FlxSpriteGroup
 	function showInfo(?planet:Planet) 
 	{
 		info.visible = true;
-		if(PlayState.currentPlanet!=this)	hightlight(0.5);
+		if(PlayState.currentPlanet!=this)	hightlight(0.6);
 		//infLabel.visible = true;
 	}
 	
 	//	merchs appear and disappear, prices change
 	public function work()
 	{
-		trace(name, "work");
+		//trace(name, "work");
 		for (key in merchsByName.keys())
 		{
-			if (FlxRandom.chanceRoll(100))
+			//if (FlxRandom.chanceRoll(100))
 			{
 				var merch:MerchOnPlanet = merchsByName[key];
 				
@@ -120,30 +120,22 @@ class Planet extends FlxSpriteGroup
 		}
 		updateInfo();
 		
-		if (FlxRandom.chanceRoll(50) || passengers.length == 0)
-		{
-			if(passengers.length <= 3)
-			{
-				var from:Planet;
-				do
-				{
-					from = cast(PlayState.planets.getRandom());
-				}
-				while (from == this);
-				//trace("before", passengers.length);
-				passengers.push(new PassengerOnPlanet(this, from));
-				Market.single.updatePassengers();
-			}
-		}
-		else
-		{
-			if (passengers.length > 0)
-			{
-				passengers.splice(0, 1);
-			}
-		}
+		passengers.splice(0, passengers.length);
 		
-		//trace("after", passengers.length);
+		var nbPassengers = FlxRandom.intRanged(0, 3);
+		
+		for (i in 0...nbPassengers)
+		{
+			var from:Planet;
+			do
+			{
+				from = cast(PlayState.planets.getRandom());
+			}
+			while (from == this);
+			//trace("before", passengers.length);
+			passengers.push(new PassengerOnPlanet(this, from));
+		}
+		Market.single.updatePassengers();
 		
 	}
 	
@@ -156,13 +148,13 @@ class Planet extends FlxSpriteGroup
 	
 	public function downlight() 
 	{
-		body.alpha = nameLabel.alpha = 0.25;
+		body.alpha = 0.4;
 		
 	}
 	
-	public function hightlight(intensity=1.0) 
+	public function hightlight(intensity = 1.0) 
 	{
-		body.alpha = nameLabel.alpha = intensity;
+		body.alpha = intensity;
 	}
 	
 	private function updateInfo()
@@ -211,10 +203,20 @@ class Planet extends FlxSpriteGroup
 			//info.add(new FlxText(10, currentY, 80, merch.icon));
 			currentY += 20;
 			
-			onUpdate.dispatch();
+			onUpdateInfo.dispatch();
 		}
 		
 		
+	}
+	
+	override public function update()
+	{
+		super.update();
+		
+		if (info.visible)
+		{
+			info.setPosition(FlxG.mouse.x, FlxG.mouse.y);
+		}
 	}
 	
 	

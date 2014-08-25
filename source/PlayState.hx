@@ -11,6 +11,7 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.plugin.MouseEventManager;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxBitmapUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
@@ -21,8 +22,8 @@ import flixel.addons.display.FlxNestedSprite;
  */
 class PlayState extends FlxState
 {
-	var t_sec:Float;
-	var t_lastFullSec:Int;
+	//var t_sec:Float;
+	//var t_lastFullSec:Int;
 	var ship:Ship;
 	public static var planets:FlxSpriteGroup;
 	var merchs:Array<MerchInUniv>;
@@ -31,6 +32,8 @@ class PlayState extends FlxState
 	var inventory:Inventory;
 	public static var market:Market;
 	public static var currentPlanet:Planet;
+	
+	var planetTrendInfos:FlxSpriteGroup;
 	
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -62,6 +65,8 @@ class PlayState extends FlxState
 		
 		add(space);
 		
+		
+		
 		//var food:MerchInUniv = new MerchInUniv('Food');
 		Merch.refPrices['Food'] = 100;
 		Merch.refPrices['Metal'] = 150;
@@ -81,6 +86,8 @@ class PlayState extends FlxState
 		
 		planets = new FlxSpriteGroup(150, 0, 10000);
 		space.add(planets);
+		
+		planetTrendInfos = new FlxSpriteGroup();
 		
 		var names = [
 			"Ban",
@@ -135,6 +142,7 @@ class PlayState extends FlxState
 					planet.addMerchType(new MerchOnPlanet('Weapon', FlxRandom.intRanged(0, 10)));
 					planet.addMerchType(new MerchOnPlanet('Crystal', FlxRandom.intRanged(0, 5)));
 					planets.add(planet);
+					planetTrendInfos.add(planet.info);
 					MouseEventManager.setMouseUpCallback(planet, selectPlanet);
 					//MouseEventManager.setMouseOverCallback(planet, planet.hightlight);
 					//MouseEventManager.setMouseOutCallback(planet, planet.downlight);
@@ -153,6 +161,10 @@ class PlayState extends FlxState
 		currentPlanet = listPlanets[0];
 		currentPlanet.hightlight();
 		market.setPlanet(listPlanets[0]);
+		
+		
+		
+		space.add(planetTrendInfos);
 		
 		
 		
@@ -189,11 +201,12 @@ class PlayState extends FlxState
 	/**
 	 * Function that is called once every frame.
 	 */
-	var tickCount:UInt;
+	//var tickCount:UInt;
 	override public function update():Void
 	{
 		super.update();
 		
+		/*
 		t_sec = Lib.getTimer() / 1000;
 		if (Math.floor(t_sec) > t_lastFullSec)
 		{
@@ -201,7 +214,7 @@ class PlayState extends FlxState
 			if (tickCount % 10 == 0)	tick();
 			tickCount++;
 		}
-		
+		*/
 		//trace(t_sec);
 		//trace(t_lastFullSec);
 		
@@ -211,10 +224,18 @@ class PlayState extends FlxState
 		space.y = ( - (FlxG.mouse.y - 240) / 2.5);
 	}
 	
-	function tick()
+	
+	function workOnOtherPlanets(planet:Planet)
 	{
-		trace("tick");
-		planets.callAll('work');
+		for (i in 0...planets.members.length)
+		{
+			var currentPlanet:Planet = cast(planets.members[i]);
+			if (planet == currentPlanet)
+			{
+				continue;
+			}
+			currentPlanet.work();
+		}
 	}
 	
 	function moveShip()
@@ -250,6 +271,9 @@ class PlayState extends FlxState
 			market.visible = false;
 			currentPlanet.downlight();
 			ship.animation.play('burst');
+			ship.setGraphicSize(16, 32);
+			//FlxTween.tween(ship.scale, { x:1.0, y:1.0 }, 0.5, { update:traceCallback } );
+			
 		}
 		//	arriving
 		else if(travelledDist > distToTravel)
@@ -259,6 +283,8 @@ class PlayState extends FlxState
 			ship.velocity.set(0, 0);
 			//ship.angle = 90;
 			//ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);
+			//FlxTween.tween(ship.scale, { x: 0.5, y:0.5}, 0.5, {update:traceCallback} );
+			ship.setGraphicSize(8, 16);
 			ship.fromPlanet = ship.toPlanet;
 			currentPlanet = ship.toPlanet;
 			currentPlanet.hightlight();
@@ -266,8 +292,15 @@ class PlayState extends FlxState
 			market.visible = true;
 			ship.animation.play('static');
 			Inventory.single.removePassenger(currentPlanet);
+			workOnOtherPlanets(currentPlanet);
 		}
 		
+	}
+	
+	function traceCallback(twe:FlxTween)
+	{
+		trace("callback");
+		//ship.setGraphicSize(ship.scale.x, ship.scale.y);
 	}
 	
 	

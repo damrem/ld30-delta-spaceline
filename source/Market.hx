@@ -47,11 +47,11 @@ class Market extends FlxSpriteGroup
 	
 	public function setPlanet(_planet:Planet)
 	{
-		if(planet !=null)	planet.onUpdate.removeAll();
+		if(planet !=null)	planet.onUpdateInfo.removeAll();
 		//trace("setPlanet");
 		planet = _planet;
-		planet.onUpdate.add(updateMerchs);
-		planet.onUpdate.add(updatePassengers);
+		planet.onUpdateInfo.add(updateMerchs);
+		planet.onUpdateInfo.add(updatePassengers);
 		//trace(planet, nameLabel);
 		nameLabel.text = planet.name;
 		
@@ -61,7 +61,7 @@ class Market extends FlxSpriteGroup
 	
 	public function updatePassengers() 
 	{
-		if(planet == PlayState.currentPlanet)	trace("updatePassengers");
+		//if(planet == PlayState.currentPlanet)	trace("updatePassengers");
 		passengerList.clear();
 		passengerList.x = 10;
 		
@@ -83,12 +83,12 @@ class Market extends FlxSpriteGroup
 		{
 			if (planet.passengers[i] == passenger)
 			{
-				trace("before", planet.passengers.length);
+				//trace("before", planet.passengers.length);
 				passengerList.remove(passenger);
 				passenger.destroy();
 				planet.passengers.splice(i, 1);
 				i--;
-				trace("after", planet.passengers.length);
+				//trace("after", planet.passengers.length);
 				return;
 			}
 			i++;
