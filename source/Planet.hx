@@ -31,7 +31,7 @@ class Planet extends FlxSpriteGroup
 	var colors:Array<UInt> = [0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffff00, 0xffff00ff, 0xff00ffff];
 	var info:flixel.group.FlxSpriteGroup;
 	
-	public var passengers:Array<Passenger>;
+	public var passengers:Array<PassengerOnPlanet>;
 	
 	public function new(Name:String, X:Int, Y:Int) 
 	{
@@ -45,7 +45,7 @@ class Planet extends FlxSpriteGroup
 		
 		merchsByName = new Map<String, MerchOnPlanet>();
 		
-		passengers = new Array<Passenger>();
+		passengers = new Array<PassengerOnPlanet>();
 		
 		var radius:UInt = FlxRandom.intRanged(8, 24);
 		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
@@ -103,7 +103,7 @@ class Planet extends FlxSpriteGroup
 	//	merchs appear and disappear, prices change
 	public function work()
 	{
-		//trace(name, "work");
+		trace(name, "work");
 		for (key in merchsByName.keys())
 		{
 			if (FlxRandom.chanceRoll(100))
@@ -116,17 +116,34 @@ class Planet extends FlxSpriteGroup
 				merch.currentPrice += FlxRandom.floatRanged( -5.0, 5.0);
 				if (merch.currentPrice < 0)	merch.currentPrice = merch.refPrice;
 				
-				updateInfo();
+			}
+		}
+		updateInfo();
+		
+		if (FlxRandom.chanceRoll(50) || passengers.length == 0)
+		{
+			if(passengers.length <= 3)
+			{
+				var from:Planet;
+				do
+				{
+					from = cast(PlayState.planets.getRandom());
+				}
+				while (from == this);
+				//trace("before", passengers.length);
+				passengers.push(new PassengerOnPlanet(this, from));
+				Market.single.updatePassengers();
+			}
+		}
+		else
+		{
+			if (passengers.length > 0)
+			{
+				passengers.splice(0, 1);
 			}
 		}
 		
-		var from:Planet;
-		do
-		{
-			from = cast(PlayState.planets.getRandom());
-		}
-		while (from == this);
-		passengers.push(new Passenger(this, from));
+		//trace("after", passengers.length);
 		
 	}
 	

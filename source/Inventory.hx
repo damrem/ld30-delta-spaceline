@@ -22,10 +22,11 @@ class Inventory extends FlxSpriteGroup
 	//var fuelLabel:FlxText;
 	var ship:Ship;
 	var size:Int = 6;
-	var stock:Array<MerchInInventory>;
-	var merchList:FlxSpriteGroup;
-	var emptySlots:flixel.group.FlxSpriteGroup;
+	//var merchs:Array<MerchInInventory>;
+	var slots:FlxSpriteGroup;
+	var emptySlots:FlxSpriteGroup;
 	static var _single:Inventory;
+	//var passengers:Array<Passenger>;
 	
 	public function new(_ship:Ship) 
 	{
@@ -39,7 +40,8 @@ class Inventory extends FlxSpriteGroup
 		
 		ship = _ship;
 		
-		stock = new Array<MerchInInventory>();
+		//merchs = new Array<MerchInInventory>();
+		//passengers = new Array<Passenger>();
 		
 		var line:LineStyle = { thickness:1 };
 		var fill:FillStyle = { hasFill:true, color:0x80ffffff, alpha:0.5 };
@@ -72,28 +74,77 @@ class Inventory extends FlxSpriteGroup
 		}
 		add(emptySlots);
 		
-		merchList = new FlxSpriteGroup(0, 75);
-		add(merchList);
+		slots = new FlxSpriteGroup(0, 75);
+		add(slots);
 		
 		
 	}
 	
-	public function buyMerch(name:String, price:Float)
+	function isFull()
+	{
+		trace(emptySlots.members.length+" - "+slots.members.length);
+		return emptySlots.members.length - slots.members.length == 0;
+	}
+	
+	public function buyMerch(name:String, price:Float):Bool
 	{
 		//trace("buyMerch");
-		if (price <= credits && stock.length < size)
+		if (price <= credits && !isFull())
 		{
 			credits -= Std.int(price);
 			updateCredit();
 			
-			stock.push(new MerchInInventory(name));
+			slots.add(new MerchInInventory(name));
+			//merchs.push();
 			
-			updateMerchs();
+			updateSlots();
 			
 			return true;
 		}
 		return false;
 	}
+	
+	public function takePassenger(passenger:PassengerInInventory):Bool
+	{
+		trace("takePassenger");
+		if (!isFull())
+		{
+			trace("still slots");
+			slots.add(passenger);
+			
+			updateSlots();
+			
+			return true;
+		}
+		return false;
+	}
+	
+	public function removePassenger(to:Planet)
+	{
+		trace("removePassenger");
+		//for (var i:UInt = 0; i < slots.members.length; i++ )
+		var i:Int = 0;
+		while(i < slots.members.length)
+		{
+			var item:Item = cast(slots.members[i]);
+			trace("slots.members[i]", slots.members[i]);
+			trace("item", item);
+			if (item.name == 'passenger')
+			{
+				var passenger:Passenger = cast(item);
+				if (passenger.to == to)
+				{
+					slots.remove(passenger, true);
+					i--;
+					passenger.destroy();
+				}
+			}
+			i++;
+		}
+		updateSlots();
+	}
+	
+	
 	
 	
 	
@@ -115,22 +166,23 @@ class Inventory extends FlxSpriteGroup
 	}
 	*/
 	
-	public function updateMerchs()
+	function updateSlots()
 	{
-		//trace("updateMerchs");
+		trace("updateSlots");
 		
-		merchList.clear();
+		//slots.clear();
 		
-		for (i in 0...stock.length)
+		for (i in 0...slots.members.length)
 		{
-			var merch:MerchInInventory = stock[i];
+			var item:Item = cast(slots.members[i]);
+			trace(item.name);
 			
-			merch.x = i % 2 * 70;
-			merch.y = Math.floor(i/2)*70;
+			item.x = i % 2 * 70;
+			item.y = Math.floor(i/2)*70;
 			
 			//merch.sellButton.y = currentY;
 			//currentY += 35;
-			merchList.add(merch);
+			slots.add(item);
 			//merchList.add(merch.sellButton);
 		}
 	}
@@ -138,14 +190,14 @@ class Inventory extends FlxSpriteGroup
 	public function removeMerch(name:String)
 	{
 		//trace("removeMerch");
-		for (i in 0...stock.length)
+		for (i in 0...slots.members.length)
 		{
-			if (stock[i].name == name)
+			var merch:Item = cast(slots.members[i]);
+			if (merch.name == name)
 			{
-				merchList.remove(stock[i]);
-				stock[i].destroy();
-				stock.splice(i, 1);
-				updateMerchs();
+				slots.remove(merch, true);
+				merch.destroy();
+				updateSlots();
 				return;
 			}
 		}

@@ -198,7 +198,7 @@ class PlayState extends FlxState
 		if (Math.floor(t_sec) > t_lastFullSec)
 		{
 			t_lastFullSec = Math.floor(t_sec);
-			if (tickCount % 5 == 0)	tick();
+			if (tickCount % 10 == 0)	tick();
 			tickCount++;
 		}
 		
@@ -265,6 +265,7 @@ class PlayState extends FlxState
 			market.setPlanet(currentPlanet);
 			market.visible = true;
 			ship.animation.play('static');
+			Inventory.single.removePassenger(currentPlanet);
 		}
 		
 	}

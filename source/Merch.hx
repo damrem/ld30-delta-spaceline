@@ -6,16 +6,15 @@ import flixel.group.FlxSpriteGroup;
  * ...
  * @author damrem
  */
-class Merch extends FlxSpriteGroup
+class Merch extends Item
 {
-	public var name:String;
 	public static var refPrices:Map<String, Float> = new Map<String, Float>();
 	//public var icon:FlxSprite;
 	
 	public function new(Name:String) 
 	{
-		super();
-		name = Name;
+		super(Name);
+		
 		
 		//icon = new FlxSprite(0, 0);
 		//trace(name.toLowerCase());

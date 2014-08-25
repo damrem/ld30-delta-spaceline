@@ -59,19 +59,39 @@ class Market extends FlxSpriteGroup
 		updatePassengers();
 	}
 	
-	function updatePassengers() 
+	public function updatePassengers() 
 	{
-		trace("updatePassengers");
+		if(planet == PlayState.currentPlanet)	trace("updatePassengers");
 		passengerList.clear();
 		passengerList.x = 10;
 		
 		for (i in 0...planet.passengers.length)
 		{
-			var passenger:Passenger = planet.passengers[i];
+			var passenger:PassengerOnPlanet = planet.passengers[i];
 			passenger.x = 0;
 			passenger.y = i * 35;
 			passengerList.add(passenger);
 			//passengers.add(passenger);
+		}
+	}
+	
+	public function removePassenger(passenger)
+	{
+		var i:Int = 0;
+		//for (i in 0...planet.passengers.length)
+		while (i < planet.passengers.length)
+		{
+			if (planet.passengers[i] == passenger)
+			{
+				trace("before", planet.passengers.length);
+				passengerList.remove(passenger);
+				passenger.destroy();
+				planet.passengers.splice(i, 1);
+				i--;
+				trace("after", planet.passengers.length);
+				return;
+			}
+			i++;
 		}
 	}
 	
