@@ -24,7 +24,7 @@ class PlayState extends FlxState
 	var t_sec:Float;
 	var t_lastFullSec:Int;
 	var ship:Ship;
-	var planets:FlxSpriteGroup;
+	public static var planets:FlxSpriteGroup;
 	var merchs:Array<MerchInUniv>;
 	var space:FlxSpriteGroup;
 	
@@ -268,6 +268,8 @@ class PlayState extends FlxState
 		}
 		
 	}
+	
+	
 }
 
 	

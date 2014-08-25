@@ -16,6 +16,7 @@ class Market extends FlxSpriteGroup
 	public var trader:Trader;
 	static var _single:Market;
 	var merchList:FlxSpriteGroup;
+	var passengerList:FlxSpriteGroup;
 	
 	public function new() 
 	{
@@ -39,6 +40,9 @@ class Market extends FlxSpriteGroup
 		
 		merchList = new FlxSpriteGroup(10, 60);
 		add(merchList);
+		
+		passengerList = new FlxSpriteGroup(10, 190);
+		add(passengerList);
 	}
 	
 	public function setPlanet(_planet:Planet)
@@ -47,10 +51,28 @@ class Market extends FlxSpriteGroup
 		//trace("setPlanet");
 		planet = _planet;
 		planet.onUpdate.add(updateMerchs);
+		planet.onUpdate.add(updatePassengers);
 		//trace(planet, nameLabel);
 		nameLabel.text = planet.name;
 		
 		updateMerchs();
+		updatePassengers();
+	}
+	
+	function updatePassengers() 
+	{
+		trace("updatePassengers");
+		passengerList.clear();
+		passengerList.x = 10;
+		
+		for (i in 0...planet.passengers.length)
+		{
+			var passenger:Passenger = planet.passengers[i];
+			passenger.x = 0;
+			passenger.y = i * 35;
+			passengerList.add(passenger);
+			//passengers.add(passenger);
+		}
 	}
 	
 	
@@ -69,7 +91,7 @@ class Market extends FlxSpriteGroup
 			merchList.add(merch);
 			merch.x = 10;
 			merch.y = currentY;
-			currentY += 60;
+			currentY += 35;
 			merch.updateText();
 		}
 	}

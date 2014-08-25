@@ -30,30 +30,36 @@ class MerchOnPlanet extends Merch
 	{
 		super(Name);
 		
-		add(new FlxShapeBox(0, 0, 120, 50, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
 		
 		currentPrice = refPrice * FlxRandom.floatRanged(0.8, 1.25);
 		availability = Avalaibility;
 		quantity = Std.int(availability * FlxRandom.floatRanged(0.8, 1.25));
 		//trace("quantity", quantity);
+
+		add(new FlxShapeBox(0, 0, 120, 30, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
 		
-		nameLabel = new FlxText(30, 12, 120, "");
+		var icon = getNewIcon();
+		add(icon);
+		icon.x = 5;
+		icon.y = 10;
+		
+		nameLabel = new FlxText(25, 2, 120, "");
 		nameLabel.color = 0x000000;
 		add(nameLabel);
 		
-		trendHolder = new FlxSpriteGroup(30, 35);
+		trendHolder = new FlxSpriteGroup(25, 15);
 		add(trendHolder);
 		
-		priceLabel = new FlxText(16, 35, 50, "");
+		priceLabel = new FlxText(11, 15, 50, "");
 		priceLabel.alignment = 'right';
 		priceLabel.color = 0x000000;
 		add(priceLabel);
 		
-		var coin = new FlxSprite(65, 37);
+		var coin = new FlxSprite(60, 17);
 		coin.loadGraphic("assets/images/minicoin.gif");
 		add(coin);
 		
-		buyButton = new FlxSpriteGroup(85, 35);
+		buyButton = new FlxSpriteGroup(85, 15);
 		var bg = new FlxShapeBox( -5, 0, 40, 15, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
 		buyButton.add(bg);
 		var arrow = new FlxSprite();
@@ -67,10 +73,7 @@ class MerchOnPlanet extends Merch
 		MouseEventManager.setMouseUpCallback(buyButton, buy);
 		add(buyButton);
 		
-		var icon = getNewIcon();
-		add(icon);
-		icon.x = 10;
-		icon.y = 10;
+		
 		//buyButton.width = 25;
 	}
 	

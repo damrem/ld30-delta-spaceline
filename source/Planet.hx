@@ -31,6 +31,8 @@ class Planet extends FlxSpriteGroup
 	var colors:Array<UInt> = [0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffff00, 0xffff00ff, 0xff00ffff];
 	var info:flixel.group.FlxSpriteGroup;
 	
+	public var passengers:Array<Passenger>;
+	
 	public function new(Name:String, X:Int, Y:Int) 
 	{
 		super(X, Y, 10);
@@ -42,6 +44,8 @@ class Planet extends FlxSpriteGroup
 		onUpdate = new FlxSignal();
 		
 		merchsByName = new Map<String, MerchOnPlanet>();
+		
+		passengers = new Array<Passenger>();
 		
 		var radius:UInt = FlxRandom.intRanged(8, 24);
 		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
@@ -116,6 +120,14 @@ class Planet extends FlxSpriteGroup
 			}
 		}
 		
+		var from:Planet;
+		do
+		{
+			from = cast(PlayState.planets.getRandom());
+		}
+		while (from == this);
+		passengers.push(new Passenger(this, from));
+		
 	}
 	
 	public function addMerchType(merch:MerchOnPlanet)
@@ -184,6 +196,8 @@ class Planet extends FlxSpriteGroup
 			
 			onUpdate.dispatch();
 		}
+		
+		
 	}
 	
 	
