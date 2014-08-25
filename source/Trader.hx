@@ -12,13 +12,13 @@ class Trader
 	}
 	public function fromMarketToInventory(merch:MerchOnPlanet):Bool
 	{
-		trace("fromMarketToInventory");
+		//trace("fromMarketToInventory");
 		return Inventory.single.buyMerch(merch.name, merch.currentPrice);
 	}
 	
 	public function fromInventoryToMarket(merch:MerchInInventory)
 	{
-		trace("fromInventoryToMarket");
+		//trace("fromInventoryToMarket");
 		var market = PlayState.market;
 		market.buyMerch(merch.name);
 		

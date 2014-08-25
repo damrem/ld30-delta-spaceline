@@ -39,7 +39,7 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		//FlxG.sound.playMusic("assets/music/Space Machine A.mp3");
+		FlxG.sound.playMusic("assets/music/Space Machine A.mp3");
 		FlxG.sound.muteKeys = ["m", "M", "0"];
 		
 		MouseEventManager.init();
@@ -47,13 +47,6 @@ class PlayState extends FlxState
 		space = new FlxSpriteGroup();
 		
 		var bg:FlxSpriteGroup = new FlxSpriteGroup();
-
-		var bmp:BitmapData = new BitmapData(640, 480);
-		var perlin:OptimizedPerlin = new OptimizedPerlin();
-		//perlin.fill(bmp, 0, 0, 0);
-		var farfaraway = new FlxSprite(0, 0, bmp);
-		farfaraway.alpha = 0.15;
-		bg.add(farfaraway);
 		
 		for (i in 0...100)
 		{
@@ -126,7 +119,7 @@ class PlayState extends FlxState
 			{
 				if (FlxRandom.chanceRoll(75))
 				{
-					trace(i);
+					//trace(i);
 					var left = Std.int(col * 330 / 3) + 30;
 					var right = Std.int((col+1) * 340 / 3) - 30;
 					var X = FlxRandom.intRanged(left, right);
@@ -173,11 +166,6 @@ class PlayState extends FlxState
 		
 	}
 	
-	public function work()
-	{
-		
-	}
-	
 	function selectPlanet(to:FlxObject)
 	{
 		//trace("selectPlanet(" + to);
@@ -201,6 +189,7 @@ class PlayState extends FlxState
 	/**
 	 * Function that is called once every frame.
 	 */
+	var tickCount:UInt;
 	override public function update():Void
 	{
 		super.update();
@@ -209,17 +198,22 @@ class PlayState extends FlxState
 		if (Math.floor(t_sec) > t_lastFullSec)
 		{
 			t_lastFullSec = Math.floor(t_sec);
-			tick();
+			if (tickCount % 5 == 0)	tick();
+			tickCount++;
 		}
+		
+		//trace(t_sec);
+		//trace(t_lastFullSec);
 		
 		moveShip();
 		
-		space.x = ( - FlxG.mouse.x / 20);
-		space.y = ( - FlxG.mouse.y / 20);
+		space.x = ( - (FlxG.mouse.x - 320) / 10);
+		space.y = ( - (FlxG.mouse.y - 240) / 10);
 	}
 	
 	function tick()
 	{
+		trace("tick");
 		planets.callAll('work');
 	}
 	

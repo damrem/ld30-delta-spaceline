@@ -25,7 +25,7 @@ class MenuState extends FlxState
 	 */
 	override public function create():Void
 	{
-		trace("create");
+		//trace("create");
 		super.create();
 		
 		var bg:FlxSpriteGroup = new FlxSpriteGroup();
@@ -123,7 +123,7 @@ class MenuState extends FlxState
 	
 	function start(obj:FlxSpriteGroup)
 	{
-		trace("start");
+		//trace("start");
 		FlxG.switchState(new PlayState());
 	}
 

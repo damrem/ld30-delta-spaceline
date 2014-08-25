@@ -22,6 +22,9 @@ class MerchOnPlanet extends Merch
 	var trendIcon:FlxSprite;
 	var trendHolder:FlxSpriteGroup;
 	public var quantity:Int;
+	public var trendTick:UInt=0;
+	public var trend:Int;
+	public var trendDuration:UInt;
 	
 	public function new(Name:String, Avalaibility:UInt)
 	{
@@ -29,9 +32,9 @@ class MerchOnPlanet extends Merch
 		
 		add(new FlxShapeBox(0, 0, 120, 50, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
 		
-		currentPrice = refPrice * FlxRandom.floatRanged(0.75, 1.25);
+		currentPrice = refPrice * FlxRandom.floatRanged(0.8, 1.25);
 		availability = Avalaibility;
-		quantity = Std.int(availability * FlxRandom.floatRanged(0.75, 1.25));
+		quantity = Std.int(availability * FlxRandom.floatRanged(0.8, 1.25));
 		//trace("quantity", quantity);
 		
 		nameLabel = new FlxText(30, 12, 120, "");
@@ -51,7 +54,8 @@ class MerchOnPlanet extends Merch
 		add(coin);
 		
 		buyButton = new FlxSpriteGroup(85, 35);
-		buyButton.add(new FlxShapeBox(-5, 0, 40, 15, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
+		var bg = new FlxShapeBox( -5, 0, 40, 15, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
+		buyButton.add(bg);
 		var arrow = new FlxSprite();
 		arrow.y = 3;
 		arrow.loadGraphic("assets/images/buy.gif");

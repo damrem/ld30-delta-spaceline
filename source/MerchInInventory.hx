@@ -49,7 +49,7 @@ class MerchInInventory extends Merch
 	
 	function sell(?button:FlxSpriteGroup) 
 	{
-		trace("sell");
+		//trace("sell");
 		PlayState.market.trader.fromInventoryToMarket(this);
 	}
 }

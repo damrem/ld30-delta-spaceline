@@ -43,9 +43,11 @@ class Market extends FlxSpriteGroup
 	
 	public function setPlanet(_planet:Planet)
 	{
-		trace("setPlanet");
+		if(planet !=null)	planet.onUpdate.removeAll();
+		//trace("setPlanet");
 		planet = _planet;
-		trace(planet, nameLabel);
+		planet.onUpdate.add(updateMerchs);
+		//trace(planet, nameLabel);
 		nameLabel.text = planet.name;
 		
 		updateMerchs();
@@ -55,7 +57,7 @@ class Market extends FlxSpriteGroup
 	
 	public function updateMerchs()
 	{
-		trace("updateMerchs");
+		//trace("updateMerchs");
 		var currentY = 50;
 		merchList.clear();
 		merchList.x = 10;
@@ -74,7 +76,7 @@ class Market extends FlxSpriteGroup
 	
 	public function buyMerch(name:String) 
 	{
-		trace("buyMerch");
+		//trace("buyMerch");
 		var merch:MerchOnPlanet = planet.merchsByName[name];
 		//planet.alpha = 0.25;
 		merch.quantity ++;

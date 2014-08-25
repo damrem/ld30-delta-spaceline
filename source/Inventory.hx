@@ -34,7 +34,7 @@ class Inventory extends FlxSpriteGroup
 		{
 			return;
 		}
-		trace("new(" + _ship);
+		//trace("new(" + _ship);
 		super();
 		
 		ship = _ship;
@@ -80,7 +80,7 @@ class Inventory extends FlxSpriteGroup
 	
 	public function buyMerch(name:String, price:Float)
 	{
-		trace("buyMerch");
+		//trace("buyMerch");
 		if (price <= credits && stock.length < size)
 		{
 			credits -= Std.int(price);
@@ -117,7 +117,7 @@ class Inventory extends FlxSpriteGroup
 	
 	public function updateMerchs()
 	{
-		trace("updateMerchs");
+		//trace("updateMerchs");
 		
 		merchList.clear();
 		
@@ -137,7 +137,7 @@ class Inventory extends FlxSpriteGroup
 	
 	public function removeMerch(name:String)
 	{
-		trace("removeMerch");
+		//trace("removeMerch");
 		for (i in 0...stock.length)
 		{
 			if (stock[i].name == name)

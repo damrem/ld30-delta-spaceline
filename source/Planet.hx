@@ -5,8 +5,10 @@ import flash.display.LineScaleMode;
 import flash.display.Sprite;
 import flixel.addons.display.shapes.FlxShapeBox;
 import flixel.addons.display.shapes.FlxShapeCircle;
+import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.util.FlxMath;
+import flixel.util.FlxSignal;
 import MerchOnPlanet;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -24,6 +26,7 @@ class Planet extends FlxSpriteGroup
 	var body:FlxSpriteGroup;
 	var selector:FlxShapeCircle;
 	//var infLabel:FlxText;
+	public var onUpdate:FlxSignal;
 	
 	var colors:Array<UInt> = [0xffff0000, 0xff00ff00, 0xff0000ff, 0xffffff00, 0xffff00ff, 0xff00ffff];
 	var info:flixel.group.FlxSpriteGroup;
@@ -35,6 +38,8 @@ class Planet extends FlxSpriteGroup
 		name = Name;
 		
 		MouseEventManager.add(this);
+		
+		onUpdate = new FlxSignal();
 		
 		merchsByName = new Map<String, MerchOnPlanet>();
 		
@@ -96,20 +101,16 @@ class Planet extends FlxSpriteGroup
 		//trace(name, "work");
 		for (key in merchsByName.keys())
 		{
-			if (FlxRandom.chanceRoll(5))
+			if (FlxRandom.chanceRoll(100))
 			{
 				var merch:MerchOnPlanet = merchsByName[key];
-				var availShift = Math.ceil(merch.availability / 10);
-				merch.quantity += FlxRandom.intRanged( -availShift, availShift);
-				if (merch.quantity < 0)	merch.quantity = 0;
-				if (availShift < 0)
-				{
-					merch.currentPrice *= FlxRandom.floatRanged(1, 1.125);
-				}
-				else if (availShift > 0)
-				{
-					merch.currentPrice *= FlxRandom.floatRanged(0.875, 1);
-				}
+				
+				merch.quantity += FlxRandom.intRanged( -1, 1);
+				if (merch.quantity < 0)	merch.quantity *= -1;
+				
+				merch.currentPrice += FlxRandom.floatRanged( -5.0, 5.0);
+				if (merch.currentPrice < 0)	merch.currentPrice = merch.refPrice;
+				
 				updateInfo();
 			}
 		}
@@ -173,12 +174,14 @@ class Planet extends FlxSpriteGroup
 			
 			//trace("trend", trend);
 			info.add(trend);
-			trace(info);
+			//trace(info);
 			
 			//trace("icon", icon);
 			//trace("info", info);
 			//info.add(new FlxText(10, currentY, 80, merch.icon));
 			currentY += 20;
+			
+			onUpdate.dispatch();
 		}
 	}
 	
