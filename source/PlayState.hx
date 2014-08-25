@@ -34,6 +34,7 @@ class PlayState extends FlxState
 	public static var currentPlanet:Planet;
 	
 	var planetTrendInfos:FlxSpriteGroup;
+	var bg:FlxSpriteGroup;
 	
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -48,7 +49,7 @@ class PlayState extends FlxState
 		
 		space = new FlxSpriteGroup();
 		
-		var bg:FlxSpriteGroup = new FlxSpriteGroup();
+		bg = new StarBackground(FlxG.stage.stageWidth * 2, FlxG.stage.stageHeight * 2, 400);
 		
 		for (i in 0...100)
 		{
@@ -119,19 +120,28 @@ class PlayState extends FlxState
 		names = FlxRandom.shuffleArray(names, names.length * 3);
 		var listPlanets = new Array<Planet>();
 		var i:UInt = 0;
-		for (col in 0...4)
+		
+		var W = 640;
+		var H = 400;
+		var nbCol = 6;
+		var colW = W / nbCol;
+		var nbRow = 3;
+		var rowH = H / nbRow;
+		
+		for (col in 0...nbCol)
 		{
-			for (row in 0...4)
+			for (row in 0...nbRow)
 			{
-				if (FlxRandom.chanceRoll(66.7))
+				//if (FlxRandom.chanceRoll(66.7))
+				if (FlxRandom.chanceRoll(75))
 				{
 					//trace(i);
-					var left = Std.int(col * 400 / 4) + 20;
-					var right = Std.int((col+1) * 400 / 4) - 20;
+					var left = Std.int(col * colW) + 20;
+					var right = Std.int((col+1) * colW) - 20;
 					var X = FlxRandom.intRanged(left, right);
 					
-					var top = Std.int(row * 440 / 4) + 20;
-					var down = Std.int((row+1) * 440 / 4) - 20;
+					var top = Std.int(row * rowH) + 20;
+					var down = Std.int((row+1) * rowH) - 20;
 					var Y = FlxRandom.intRanged(top, down);
 					
 					var planet = new Planet(names[i], X, Y);
@@ -220,8 +230,8 @@ class PlayState extends FlxState
 		
 		moveShip();
 		
-		space.x = ( - (FlxG.mouse.x - 320) / 2.5);
-		space.y = ( - (FlxG.mouse.y - 240) / 2.5);
+		bg.x = ( - (FlxG.mouse.x - FlxG.stage.stageWidth / 2)/100);
+		bg.y = ( - (FlxG.mouse.y - FlxG.stage.stageHeight / 2)/100);
 	}
 	
 	

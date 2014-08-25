@@ -47,7 +47,7 @@ class Planet extends FlxSpriteGroup
 		
 		passengers = new Array<PassengerOnPlanet>();
 		
-		var radius:UInt = FlxRandom.intRanged(8, 24);
+		var radius:UInt = FlxRandom.intRanged(8, 32);
 		var color:UInt = 0xff000000 + FlxRandom.intRanged(0x000000, 0xffffff);// colors[FlxRandom.intRanged(0, colors.length - 1)];
 		add(new FlxShapeCircle( -radius, -radius, radius, { thickness:0, color:0xff000000 }, { hasFill:true, color:0xff000000 } ));
 		body = new FlxSpriteGroup();

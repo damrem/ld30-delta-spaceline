@@ -31,46 +31,31 @@ class MenuState extends FlxState
 		FlxG.sound.playMusic("assets/music/Space Machine A.mp3");
 		FlxG.sound.muteKeys = ["m", "M", "0"];
 		
-		var bg:FlxSpriteGroup = new FlxSpriteGroup();
-		
-		bg.add(new FlxShapeBox(0, 0, 640, 480, 
-		{ thickness:0, color:0x000000, scaleMode:LineScaleMode.NORMAL, jointStyle:JointStyle.BEVEL, capsStyle:CapsStyle.NONE }, 
-		{ hasFill:true, color:0xff000000 } ));
-
-		for (i in 0...100)
-		{
-			var starlength:UInt = FlxRandom.intRanged(1, 5);
-			var starsize:UInt = FlxRandom.intRanged(0, 1);
-			var star:FlxShapeCross = new FlxShapeCross(FlxRandom.intRanged(0, 640), FlxRandom.intRanged(0, 480),
-			starlength, starsize, starlength, starsize, 0.5, 0.5, 
-			{ thickness: 0, color:0x00000000 }, { hasFill:true, color:0xffffffff } );
-			star.alpha = FlxRandom.intRanged(0, 1);
-			bg.add(star);
-		}
+		var bg = new StarBackground(FlxG.stage.stageWidth, FlxG.stage.stageHeight);
 		add(bg);
 		
-		var title = new FlxText(0, 75, 640, "DELTA SPACELINE", 32);
+		var title = new FlxText(0, 60, FlxG.stage.stageWidth, "DELTA SPACELINE", 32);
 		title.alignment = 'center';
 		title.color = 0xffff00;
 		add(title);
 		
-		var subtitle = new FlxText(0, 115, 640, "A space trading game.", 12);
+		var subtitle = new FlxText(0, 100, FlxG.stage.stageWidth, "A space trading game.", 12);
 		subtitle.alignment = 'center';
 		//title.color = 0xffff00;
 		add(subtitle);
 		
-		var objective = new FlxText(10, 175, FlxG.stage.stageWidth - 20, "Objective: gather 10,000     within the minimum amount of travels!", 12);
+		var objective = new FlxText(0, 170, FlxG.stage.stageWidth, "Objective: gather 10,000     within the minimum amount of travels!", 12);
 		objective.alignment = 'center';
 		add(objective);
 		
-		var coin = new FlxSprite(257, objective.y);
+		var coin = new FlxSprite(417, objective.y);
 		coin.loadGraphic("assets/images/coin.gif");
 		
-		var help = new FlxText(0, 250, 640, "Click to Start - M: Mute", 16);
+		var help = new FlxText(0, 235, FlxG.stage.stageWidth, "Click to Start - M: Mute", 16);
 		help.alignment = 'center';
 		add(help);
 		
-		var tutorial = new FlxText(200, 325, 440, "Travel aboard your ship by clicking on planets!\nTrade merchandises!\nCheck price trends!\nBuy cheap!\nSell hard!\nCarry passengers to optimize your moves!", 12);
+		var tutorial = new FlxText(400, 305, 440, "Travel aboard your ship by clicking on planets!\nTrade merchandises!\nCheck price trends!\nBuy cheap!\nSell hard!\nCarry passengers to optimize your moves!", 12);
 		
 		var ship = new FlxSprite(tutorial.x - 18, tutorial.y - 12);
 		ship.loadGraphic("assets/images/ship.gif", true, 16, 32);
@@ -124,7 +109,7 @@ class MenuState extends FlxState
 		var passenger = new FlxSprite(tutorial.x - 18, tutorial.y + 75);
 		passenger.loadGraphic("assets/images/passenger.gif");
 		
-		var credits = new FlxText(0, 450, 640, "Made in 72h by @damrem for Ludum Dare 30: 'Connected Worlds'.\nSome graphics by Arachne on TIGsource - Music by Kevin MacLeod - Incompetech.com");
+		var credits = new FlxText(0, 450, FlxG.stage.stageWidth, "Made in 72h by @damrem for Ludum Dare 30: 'Connected Worlds'.\nSome graphics by Arachne on TIGsource - Music by Kevin MacLeod - Incompetech.com");
 		credits.alignment = 'center';
 		add(credits);
 		

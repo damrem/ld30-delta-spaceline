@@ -27,7 +27,7 @@ class VictoryState extends FlxState
 	{
 		super.create();
 		
-		var bg = new StarBackground();
+		var bg = new StarBackground(FlxG.stage.stageWidth, FlxG.stage.stageHeight);
 		add(bg);
 		
 		var victory = new FlxText(0, 200, FlxG.stage.stageWidth, "Victory!!!", 16);
