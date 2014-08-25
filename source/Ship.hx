@@ -4,7 +4,6 @@ import flixel.addons.display.shapes.FlxShapeArrow;
 import flixel.addons.display.shapes.FlxShapeBox;
 import flixel.addons.display.shapes.FlxShapeCircle;
 import flixel.FlxSprite;
-import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxPoint;
 import flixel.util.FlxVector;
 import flixel.util.FlxVelocity;
@@ -13,7 +12,7 @@ import flixel.util.FlxVelocity;
  * ...
  * @author damrem
  */
-class Ship extends FlxSpriteGroup
+class Ship extends FlxSprite
 {
 	public var fromPlanet:Planet;
 	public var toPlanet:Planet;
@@ -24,9 +23,14 @@ class Ship extends FlxSpriteGroup
 	{
 		super();
 		//add(new FlxShapeCircle(0, -5, 5, { thickness:0, color:0xffffffff }, { hasFill:true, color:0xffffffff } ));
-		add(new FlxShapeBox(0, 0, 8, 12, { thickness:0, color:0xffffffff }, { hasFill:true, color:0xffffffff } ));
-		offset.x = 4;
-		offset.y = 6;
+		loadGraphic("assets/images/ship.gif", true, 16, 32, true);
+		
+		animation.add('static', [0]);
+		animation.add('burst', [1, 2], 5);
+		
+		//add(new FlxShapeBox(0, 0, 8, 12, { thickness:0, color:0xffffffff }, { hasFill:true, color:0xffffffff } ));
+		//origin.x = offset.x = 8;
+		//origin.y = offset.y = 16;
 		//origin.x = origin.y = 8;
 		//alpha = 0.5;
 		fuel = 10000.0;
@@ -38,7 +42,10 @@ class Ship extends FlxSpriteGroup
 		var vv:FlxVector = new FlxVector();
 		vv.x = velocity.x;
 		vv.y = velocity.y;
-		angle = vv.degrees + 90;
+		
+		
+		angle = Math.round(vv.degrees / 90) * 90 + 90;
+		if (vv.length == 0)	angle = vv.degrees;
 	}
 	
 	public function burnFuel(distance:Float)

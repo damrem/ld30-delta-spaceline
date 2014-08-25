@@ -226,11 +226,11 @@ class PlayState extends FlxState
 		
 		//if the ship is departing, we use the energy necessary to the trip
 		var travelledDist = FlxMath.distanceBetween(ship.fromPlanet, ship);
-		/*
-		trace("travelledDist", travelledDist);
-		trace(ship.fromPlanet.x, ship.fromPlanet.y, ship.fromPlanet.origin);
-		trace(ship.x, ship.y, ship.origin);
-		*/
+		
+		//trace("travelledDist", travelledDist);
+		//trace(ship.fromPlanet.x, ship.fromPlanet.y, ship.fromPlanet.origin);
+		//trace(ship.x, ship.y, ship.origin);
+		
 		
 		var distToTravel = FlxMath.distanceBetween(ship.fromPlanet, ship.toPlanet);
 		//trace("distToTravel", distToTravel);
@@ -240,14 +240,16 @@ class PlayState extends FlxState
 		//trace("travelStep", travelStep);
 		
 		//	departing
-		if (travelledDist == 0 && !ship.isTravelling && ship.fuel >= distToTravel)
+		if (!ship.isTravelling && ship.fuel >= distToTravel)
 		{
 			//trace("departing");
 			//trace("ship", ship);
 			inventory.addCredits( -distToTravel);
 			ship.acceleration.set(travelStep.x, travelStep.y);
+			ship.angle = 0;
 			market.visible = false;
 			currentPlanet.downlight();
+			ship.animation.play('burst');
 		}
 		//	arriving
 		else if(travelledDist > distToTravel)
@@ -255,12 +257,14 @@ class PlayState extends FlxState
 			//trace("arriving");
 			ship.acceleration.set(0, 0);
 			ship.velocity.set(0, 0);
-			ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);
+			//ship.angle = 90;
+			//ship.setPosition(ship.toPlanet.x, ship.toPlanet.y);
 			ship.fromPlanet = ship.toPlanet;
 			currentPlanet = ship.toPlanet;
 			currentPlanet.hightlight();
 			market.setPlanet(currentPlanet);
 			market.visible = true;
+			ship.animation.play('static');
 		}
 		
 	}
