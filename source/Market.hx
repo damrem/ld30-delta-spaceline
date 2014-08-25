@@ -20,6 +20,7 @@ class Market extends FlxSpriteGroup
 	
 	public function new() 
 	{
+		trace("new");
 		if (_single == null)	_single = this;
 		else 
 		{
@@ -38,10 +39,11 @@ class Market extends FlxSpriteGroup
 		nameLabel.alignment = 'center';
 		add(nameLabel);
 		
-		merchList = new FlxSpriteGroup(10, 60);
+		merchList = new FlxSpriteGroup(10, 80);
+		//merchList.alpha = 0.5;
 		add(merchList);
 		
-		passengerList = new FlxSpriteGroup(10, 190);
+		passengerList = new FlxSpriteGroup(10, 210);
 		add(passengerList);
 	}
 	
@@ -53,7 +55,7 @@ class Market extends FlxSpriteGroup
 		planet.onUpdateInfo.add(updateMerchs);
 		planet.onUpdateInfo.add(updatePassengers);
 		//trace(planet, nameLabel);
-		nameLabel.text = planet.name;
+		nameLabel.text = "Planet " + planet.name.toUpperCase();
 		
 		updateMerchs();
 		updatePassengers();
@@ -100,8 +102,9 @@ class Market extends FlxSpriteGroup
 	public function updateMerchs()
 	{
 		//trace("updateMerchs");
-		var currentY = 50;
+		var currentY = 65;
 		merchList.clear();
+		merchList.y = 80;
 		merchList.x = 10;
 		//trace(place.merchs.length);
 		for (key in planet.merchsByName.keys())

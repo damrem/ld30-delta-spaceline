@@ -51,24 +51,24 @@ class Inventory extends FlxSpriteGroup
 		var bg:FlxShapeBox = new FlxShapeBox(0, 0, 130, 460, line, fill);
 		add(bg);
 		
-		var nameLabel = new FlxText(0, 10, 130, "Delta Spaceline", 12);
+		var nameLabel = new FlxText(0, 10, 130, "Delta Spaceline Ship Cargo", 12);
 		nameLabel.alignment = 'center';
 		add(nameLabel);
 		
-		var coin = new FlxSprite(10, 40);
+		var coin = new FlxSprite(10, 50);
 		coin.loadGraphic("assets/images/coin.gif");
 		add(coin);
 		
-		creditLabel = new FlxText(28, 40, 75, "", 12);
+		creditLabel = new FlxText(28, 50, 75, "", 12);
 		creditLabel.color = 0x000000;
 		add(creditLabel);
 		updateCredit();
 		
-		var travel = new FlxSprite(10, 62);
+		var travel = new FlxSprite(10, 72);
 		travel.loadGraphic("assets/images/travel.gif");
 		add(travel);
 		
-		travelLabel = new FlxText(28, 60, 75, "", 12);
+		travelLabel = new FlxText(28, 70, 75, "", 12);
 		travelLabel.color = 0x000000;
 		add(travelLabel);
 		updateTravels();
