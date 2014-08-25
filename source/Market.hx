@@ -45,10 +45,13 @@ class Market extends FlxSpriteGroup
 	{
 		trace("setPlanet");
 		planet = _planet;
+		trace(planet, nameLabel);
 		nameLabel.text = planet.name;
 		
 		updateMerchs();
 	}
+	
+	
 	
 	public function updateMerchs()
 	{

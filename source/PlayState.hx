@@ -26,6 +26,7 @@ class PlayState extends FlxState
 	var ship:Ship;
 	var planets:FlxSpriteGroup;
 	var merchs:Array<MerchInUniv>;
+	var space:FlxSpriteGroup;
 	
 	var inventory:Inventory;
 	public static var market:Market;
@@ -42,6 +43,8 @@ class PlayState extends FlxState
 		FlxG.sound.muteKeys = ["m", "M", "0"];
 		
 		MouseEventManager.init();
+		
+		space = new FlxSpriteGroup();
 		
 		var bg:FlxSpriteGroup = new FlxSpriteGroup();
 
@@ -64,6 +67,8 @@ class PlayState extends FlxState
 		}
 		add(bg);
 		
+		add(space);
+		
 		//var food:MerchInUniv = new MerchInUniv('Food');
 		Merch.refPrices['Food'] = 100;
 		Merch.refPrices['Metal'] = 150;
@@ -82,7 +87,7 @@ class PlayState extends FlxState
 		add(market);
 		
 		planets = new FlxSpriteGroup(150, 0, 10000);
-		add(planets);
+		space.add(planets);
 		
 		var names = [
 			"Ban",
@@ -148,44 +153,10 @@ class PlayState extends FlxState
 		
 		var nbPlanets = FlxRandom.intRanged(8, 12);
 		
-		for (i in 0...nbPlanets)
-		{
-			
-			
-			
-			
-		}
-/*
-		var planet1 = new Planet("Dhirsononn", 200, 100);
-		planet1.downlight();
-		planet1.addMerchType(new MerchOnPlanet('Food', 50));
-		planet1.addMerchType(new MerchOnPlanet('Metal', 10));
-		planet1.addMerchType(new MerchOnPlanet('Weapon', 0));
-		planet1.addMerchType(new MerchOnPlanet('Crystal', 100));
-		planets.add(planet1);
-		MouseEventManager.setMouseUpCallback(planet1, selectPlanet);
-
-		var planet2 = new Planet("Kenti", 100, 350);
-		planet2.downlight();
-		planet2.addMerchType(new MerchOnPlanet('Food', 20));
-		planet2.addMerchType(new MerchOnPlanet('Metal', 100));
-		planet2.addMerchType(new MerchOnPlanet('Weapon', 40));
-		planet2.addMerchType(new MerchOnPlanet('Crystal', 0));
-		planets.add(planet2);
-		MouseEventManager.setMouseUpCallback(planet2, selectPlanet);
-
-		var planet3 = new Planet("Bastion", 250, 250);
-		planet3.downlight();
-		planet3.addMerchType(new MerchOnPlanet('Food', 100));
-		planet3.addMerchType(new MerchOnPlanet('Metal', 50));
-		planet3.addMerchType(new MerchOnPlanet('Weapon', 00));
-		planet3.addMerchType(new MerchOnPlanet('Crystal', 0));
-		planets.add(planet3);
-		MouseEventManager.setMouseUpCallback(planet3, selectPlanet);
-		*/
+		
 		listPlanets = FlxRandom.shuffleArray(listPlanets, listPlanets.length * 3);
 		ship.setFromPlanet(listPlanets[0]);
-		add(ship);
+		space.add(ship);
 		currentPlanet = listPlanets[0];
 		currentPlanet.hightlight();
 		market.setPlanet(listPlanets[0]);
@@ -198,7 +169,12 @@ class PlayState extends FlxState
 		add(inventory);
 		
 		
+		//FlxG.camera.follow(FlxG.mouse.
 		
+	}
+	
+	public function work()
+	{
 		
 	}
 	
@@ -229,13 +205,6 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
-		if (FlxG.keys.justPressed.M) 
-		{
-		}
-		
-		
-		
-		
 		t_sec = Lib.getTimer() / 1000;
 		if (Math.floor(t_sec) > t_lastFullSec)
 		{
@@ -244,6 +213,9 @@ class PlayState extends FlxState
 		}
 		
 		moveShip();
+		
+		space.x = ( - FlxG.mouse.x / 20);
+		space.y = ( - FlxG.mouse.y / 20);
 	}
 	
 	function tick()

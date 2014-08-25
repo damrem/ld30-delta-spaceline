@@ -53,7 +53,7 @@ class MenuState extends FlxState
 		var credits = new FlxText(125, 140, 440, "A space trading game. #LD48 LD#30 entry by @damrem on theme 'Connected Worlds'.\nMusic by Kevin MacLeod - Incompetech.com");
 		add(credits);
 		
-		var help = new FlxText(125, 170, 440, "Click to Start - M: Mute - R: Restart - P: Pause", 12);
+		var help = new FlxText(125, 170, 440, "Click to Start - M: Mute", 12);
 		add(help);
 		
 		var tutorial = new FlxText(125, 200, 440, "Travel aboard your ship by clicking on planets.\nTrade merchandises:\nCheck price trends...\nbuy cheap...\nsell hard...\nand make good money!", 12);

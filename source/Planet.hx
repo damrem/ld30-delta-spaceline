@@ -173,6 +173,7 @@ class Planet extends FlxSpriteGroup
 			
 			//trace("trend", trend);
 			info.add(trend);
+			trace(info);
 			
 			//trace("icon", icon);
 			//trace("info", info);
