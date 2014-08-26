@@ -96,7 +96,7 @@ class Planet extends FlxSpriteGroup
 	function showInfo(?planet:Planet) 
 	{
 		info.visible = true;
-		if(PlayState.currentPlanet!=this)	hightlight(0.6);
+		if(PlayState.currentPlanet!=this)	highlight(0.5);
 		//infLabel.visible = true;
 	}
 	
@@ -148,11 +148,11 @@ class Planet extends FlxSpriteGroup
 	
 	public function downlight() 
 	{
-		body.alpha = 0.4;
+		body.alpha = 0.125;
 		
 	}
 	
-	public function hightlight(intensity = 1.0) 
+	public function highlight(intensity = 1.0) 
 	{
 		body.alpha = intensity;
 	}

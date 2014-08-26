@@ -169,7 +169,7 @@ class PlayState extends FlxState
 		space.add(ship);
 		//ship.land();
 		currentPlanet = listPlanets[0];
-		currentPlanet.hightlight();
+		currentPlanet.highlight();
 		market.setPlanet(listPlanets[0]);
 		
 		
@@ -319,7 +319,7 @@ class PlayState extends FlxState
 			
 			ship.fromPlanet = ship.toPlanet;
 			currentPlanet = ship.toPlanet;
-			currentPlanet.hightlight();
+			currentPlanet.highlight();
 			market.setPlanet(currentPlanet);
 			market.visible = true;
 			

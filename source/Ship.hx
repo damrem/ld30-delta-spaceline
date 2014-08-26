@@ -62,17 +62,17 @@ class Ship extends FlxSprite
 	
 	public function land() 
 	{
-		setGraphicSize(8, 16);
-		offset.x = -16;
-		offset.y = 16;
+		//setGraphicSize(8, 16);
+		//offset.x = -16;
+		//offset.y = 16;
 		animation.play('static');
 	}
 	
 	public function takeOff() 
 	{
-		setGraphicSize(16, 32);
+		//setGraphicSize(16, 32);
 		angle = 0;
-		offset.x = offset.y = 0;
+		//offset.x = offset.y = 0;
 		animation.play('burst');
 	}
 	
