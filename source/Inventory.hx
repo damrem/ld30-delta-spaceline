@@ -8,6 +8,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxTypedSpriteGroup;
 import flixel.text.FlxText;
+import flixel.util.FlxMath;
 import flixel.util.FlxSpriteUtil.FillStyle;
 import flixel.util.FlxSpriteUtil.LineStyle;
 
@@ -18,7 +19,7 @@ import flixel.util.FlxSpriteUtil.LineStyle;
 class Inventory extends FlxSpriteGroup
 {
 	var nbTravels:UInt;
-	var nbCredits:UInt = 2500;
+	public var nbCredits:UInt = 2500;
 	var creditLabel:FlxText;
 	//var fuel:Float;
 	//var fuelLabel:FlxText;
@@ -88,8 +89,6 @@ class Inventory extends FlxSpriteGroup
 		
 		slots = new FlxSpriteGroup(emptySlots.x, emptySlots.y);
 		add(slots);
-		
-		
 	}
 	
 	function updateTravels() 
@@ -99,8 +98,13 @@ class Inventory extends FlxSpriteGroup
 	
 	function isFull()
 	{
-		trace(emptySlots.members.length+" - "+slots.members.length);
+		//trace(emptySlots.members.length+" - "+slots.members.length);
 		return emptySlots.members.length - slots.members.length == 0;
+	}
+	
+	function isEmpty()
+	{
+		return slots.members.length == 0;
 	}
 	
 	public function buyMerch(name:String, price:Float):Bool
@@ -123,10 +127,10 @@ class Inventory extends FlxSpriteGroup
 	
 	public function takePassenger(passenger:PassengerInInventory):Bool
 	{
-		trace("takePassenger");
+		//trace("takePassenger");
 		if (!isFull())
 		{
-			trace("still slots");
+			//trace("still slots");
 			slots.add(passenger);
 			
 			updateSlots();
@@ -174,6 +178,39 @@ class Inventory extends FlxSpriteGroup
 			//var victory = new VictoryState(nbTravels);
 			FlxG.switchState(new VictoryState(nbTravels));
 		}
+		
+		if (isGameOver())
+		{
+			FlxG.switchState(new GameOverState(nbTravels));
+		}
+	}
+	
+	function isGameOver():Bool
+	{
+		//trace(isEmpty(), !canBuyMerch(), !canTravel());
+		return isEmpty() && !canBuyMerch() && !canTravel();
+	}
+	
+	function canBuyMerch():Bool
+	{
+		var canBuy:Bool=false;
+		for (i in 0...Market.single.merchList.members.length)
+		{
+			var merch:MerchOnPlanet = cast(Market.single.merchList.members[i]);
+			canBuy = canBuy || merch.currentPrice < nbCredits;
+		}
+		return canBuy;
+	}
+	
+	function canTravel():Bool
+	{
+		var canTravel:Bool=false;
+		for (i in 0...PlayState.planets.members.length)
+		{
+			var planet = PlayState.planets.members[i];
+			canTravel = canTravel || FlxMath.distanceBetween(planet, PlayState.currentPlanet) / 2 < nbCredits;
+		}
+		return canTravel;
 	}
 	
 	function updateCredit()

@@ -15,12 +15,12 @@ class Market extends FlxSpriteGroup
 	public var planet:Planet;
 	public var trader:Trader;
 	static var _single:Market;
-	var merchList:FlxSpriteGroup;
+	public var merchList:FlxSpriteGroup;
 	var passengerList:FlxSpriteGroup;
 	
 	public function new() 
 	{
-		trace("new");
+		//trace("new");
 		if (_single == null)	_single = this;
 		else 
 		{
@@ -49,7 +49,8 @@ class Market extends FlxSpriteGroup
 	
 	public function setPlanet(_planet:Planet)
 	{
-		if(planet !=null)	planet.onUpdateInfo.removeAll();
+		//if (planet == null)	return;
+		if(planet!=null)	planet.onUpdateInfo.removeAll();
 		//trace("setPlanet");
 		planet = _planet;
 		planet.onUpdateInfo.add(updateMerchs);

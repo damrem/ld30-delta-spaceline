@@ -82,18 +82,17 @@ class Planet extends FlxSpriteGroup
 		*/
 		hideInfo();
 		
-		MouseEventManager.setMouseOverCallback(this, showInfo);
-		MouseEventManager.setMouseOutCallback(this, hideInfo);
+		
 	}
 	
-	function hideInfo(?planet:Planet) 
+	public function hideInfo(?planet:Planet) 
 	{
 		info.visible = false;
 		if(PlayState.currentPlanet!=this)	downlight();
 		//infLabel.visible = false;
 	}
 	
-	function showInfo(?planet:Planet) 
+	public function showInfo(?planet:Planet) 
 	{
 		info.visible = true;
 		if(PlayState.currentPlanet!=this)	highlight(0.5);

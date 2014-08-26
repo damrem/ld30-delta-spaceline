@@ -2,7 +2,9 @@ package ;
 
 import flash.display.BitmapData;
 import flash.Lib;
+import flixel.addons.display.shapes.FlxShapeBox;
 import flixel.addons.display.shapes.FlxShapeCross;
+import flixel.addons.display.shapes.FlxShapeLightning;
 import flixel.addons.display.shapes.FlxShapeSquareDonut;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -11,10 +13,13 @@ import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.plugin.MouseEventManager;
+import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxBitmapUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
+import flixel.util.FlxSpriteUtil.FillStyle;
+import flixel.util.FlxSpriteUtil.LineStyle;
 import flixel.util.FlxVector;
 import flixel.addons.display.FlxNestedSprite;
 /**
@@ -35,6 +40,9 @@ class PlayState extends FlxState
 	
 	var planetTrendInfos:FlxSpriteGroup;
 	var bg:FlxSpriteGroup;
+	var path:FlxSprite;
+	var fare:flixel.text.FlxText;
+	var fareCoin:flixel.FlxSprite;
 	
 	/**
 	 * Function that is called up when to state is created to set it up.
@@ -155,6 +163,8 @@ class PlayState extends FlxState
 					MouseEventManager.setMouseUpCallback(planet, selectPlanet);
 					//MouseEventManager.setMouseOverCallback(planet, planet.hightlight);
 					//MouseEventManager.setMouseOutCallback(planet, planet.downlight);
+					MouseEventManager.setMouseOverCallback(planet, onPlanetOver);
+					MouseEventManager.setMouseOutCallback(planet, onPlanetOut);
 					listPlanets.push(planet);
 					i++;
 				}
@@ -163,6 +173,21 @@ class PlayState extends FlxState
 		
 		var nbPlanets = FlxRandom.intRanged(8, 12);
 		
+		var line:LineStyle = { thickness:1, color:0xffffffff };
+		var fill:FillStyle = { hasFill:true, color:0xffffffff };
+		path = new FlxShapeBox(0, 0, 1, 1, line, fill);
+		space.add(path);
+		path.visible = false;
+		
+		fare = new FlxText(0, 0, 25, "");
+		fare.alignment = 'right';
+		fare.visible = false;
+		space.add(fare);
+		
+		fareCoin = new FlxSprite();
+		fareCoin.loadGraphic("assets/images/coin.gif");
+		fareCoin.visible = false;
+		space.add(fareCoin);
 		
 		listPlanets = FlxRandom.shuffleArray(listPlanets, listPlanets.length * 3);
 		ship.setFromPlanet(listPlanets[0]);
@@ -186,6 +211,34 @@ class PlayState extends FlxState
 		
 		//FlxG.camera.follow(FlxG.mouse.
 		
+	}
+	
+	function onPlanetOver(planet:Planet)
+	{
+		planet.showInfo();
+		
+		if (planet == currentPlanet) return;
+		var v2d = FlxVector.get(planet.x - currentPlanet.x, planet.y - currentPlanet.y);
+		//trace(v2d);
+		path.x = fare.x = Math.min(planet.x, currentPlanet.x) + Math.abs(planet.x - currentPlanet.x)/2;
+		path.y = fare.y = Math.min(planet.y, currentPlanet.y) + Math.abs(planet.y - currentPlanet.y) / 2;
+		fare.text = "" + Std.int(FlxMath.distanceBetween(planet, currentPlanet) / 2);
+		fareCoin.x = fare.x + fare.width;
+		fareCoin.y = fare.y - 2;
+		path.setGraphicSize(Std.int(v2d.length), 1);
+		path.angle = v2d.degrees;
+		path.visible = true;
+		fare.visible = true;
+		fareCoin.visible = true;
+	}
+	
+	function onPlanetOut(planet:Planet)
+	{
+		planet.hideInfo();
+		if (planet == currentPlanet) return;
+		path.visible = false;
+		fare.visible = false;
+		fareCoin.visible = false;
 	}
 	
 	function selectPlanet(to:FlxObject)
@@ -279,7 +332,7 @@ class PlayState extends FlxState
 		//ship.acceleration.set(halfRemaining.x, halfRemaining.y);
 		
 		//	departing
-		if (!ship.isTravelling && ship.fuel >= distToTravel)
+		if (!ship.isTravelling && inventory.nbCredits >= distToTravel / 2)
 		{
 			ship.isTravelling = true;
 			
@@ -307,7 +360,7 @@ class PlayState extends FlxState
 		//	arriving
 		else if(travelledDist > distToTravel)
 		{
-			trace("arriving");
+			//trace("arriving");
 			ship.isTravelling = false;
 			
 			//ship.acceleration.x *= -1; 
@@ -332,7 +385,7 @@ class PlayState extends FlxState
 	
 	function traceCallback(twe:FlxTween)
 	{
-		trace("callback");
+		//trace("callback");
 		//ship.setGraphicSize(ship.scale.x, ship.scale.y);
 	}
 	

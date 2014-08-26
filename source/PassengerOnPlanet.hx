@@ -63,7 +63,7 @@ class PassengerOnPlanet extends Passenger
 	
 	function take(button:FlxSprite)
 	{
-		trace("take");
+		//trace("take");
 		var passenger = new PassengerInInventory(from, to);
 		if (Inventory.single.takePassenger(passenger))
 		{

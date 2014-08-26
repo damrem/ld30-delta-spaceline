@@ -25,13 +25,13 @@ class Passenger extends Item
 	
 	function highlightDest(passenger:FlxSprite) 
 	{
-		trace("highlightDest");
+		//trace("highlightDest");
 		to.highlight(0.75);
 	}
 	
 	function downlightDest(passenger:FlxSprite) 
 	{
-		trace("downlightDest");
+		//trace("downlightDest");
 		to.downlight();
 	}
 	

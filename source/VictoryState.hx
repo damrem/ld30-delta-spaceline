@@ -47,7 +47,7 @@ class VictoryState extends FlxState
 	function next(obj:FlxSpriteGroup)
 	{
 		//trace("start");
-		FlxG.switchState(new MenuState());
+		//FlxG.switchState(new MenuState());
 	}
 	
 	public function setNbTravels(nbTravels)
