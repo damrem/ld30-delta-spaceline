@@ -53,8 +53,8 @@ class PassengerOnPlanet extends Passenger
 		buyLabel.color = 0x000000;
 		takeButton.add(buyLabel);
 		
-		MouseEventManager.add(bg);
-		MouseEventManager.setMouseUpCallback(bg, take);
+		//MouseEventManager.add(bg);
+		MouseEventManager.setMouseUpCallback(this, take);
 		
 		add(takeButton);
 		
@@ -71,6 +71,7 @@ class PassengerOnPlanet extends Passenger
 			Market.single.removePassenger(this);
 			Market.single.updatePassengers();
 		}
+		to.downlight();
 		//Market.single.updatePassengers();
 	}
 	

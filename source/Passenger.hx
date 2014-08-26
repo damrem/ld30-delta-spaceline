@@ -1,5 +1,7 @@
 package;
+import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
+import flixel.plugin.MouseEventManager;
 import flixel.util.FlxMath;
 
 /**
@@ -15,6 +17,22 @@ class Passenger extends Item
 		super('passenger');
 		from = From;
 		to = To;
+		
+		MouseEventManager.add(this);
+		MouseEventManager.setMouseOverCallback(this, highlightDest);
+		MouseEventManager.setMouseOutCallback(this, downlightDest);
+	}
+	
+	function highlightDest(passenger:FlxSprite) 
+	{
+		trace("highlightDest");
+		to.highlight(0.75);
+	}
+	
+	function downlightDest(passenger:FlxSprite) 
+	{
+		trace("downlightDest");
+		to.downlight();
 	}
 	
 	public function getFare():UInt
