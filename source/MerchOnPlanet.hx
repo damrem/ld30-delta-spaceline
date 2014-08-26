@@ -36,7 +36,8 @@ class MerchOnPlanet extends Merch
 		quantity = Std.int(availability * FlxRandom.floatRanged(0.8, 1.25));
 		//trace("quantity", quantity);
 
-		add(new FlxShapeBox(0, 0, 120, 30, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
+		var bg = new FlxShapeBox(0, 0, 120, 30, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
+		add(bg);
 		
 		var icon = getNewIcon();
 		add(icon);
@@ -60,8 +61,8 @@ class MerchOnPlanet extends Merch
 		add(coin);
 		
 		buyButton = new FlxSpriteGroup(85, 15);
-		var bg = new FlxShapeBox( -5, 0, 40, 15, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
-		buyButton.add(bg);
+		var buttonBg = new FlxShapeBox( -5, 0, 40, 15, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
+		buyButton.add(buttonBg);
 		var arrow = new FlxSprite();
 		arrow.y = 3;
 		arrow.loadGraphic("assets/images/buy.gif");
@@ -69,15 +70,16 @@ class MerchOnPlanet extends Merch
 		var buyLabel = new FlxText(10, 0, 30, "Buy");
 		buyLabel.color = 0x000000;
 		buyButton.add(buyLabel);
-		MouseEventManager.add(buyButton);
-		MouseEventManager.setMouseUpCallback(buyButton, buy);
+		
+		MouseEventManager.add(bg);
+		MouseEventManager.setMouseUpCallback(bg, buy);
 		add(buyButton);
 		
 		
 		//buyButton.width = 25;
 	}
 	
-	function buy(button:FlxSpriteGroup) 
+	function buy(button:FlxSprite) 
 	{
 		//trace("buy");
 		//trace("quantity", quantity, name);

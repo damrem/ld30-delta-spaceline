@@ -20,8 +20,8 @@ class PassengerOnPlanet extends Passenger
 	{
 		super(From, To);
 		
-		
-		add(new FlxShapeBox(0, 0, 120, 30, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
+		var bg = new FlxShapeBox(0, 0, 120, 30, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
+		add(bg);
 		
 		var avatar = new FlxSprite(5, 14);
 		avatar.loadGraphic("assets/images/passenger.gif");
@@ -41,8 +41,8 @@ class PassengerOnPlanet extends Passenger
 		add(coin);
 		
 		takeButton = new FlxSpriteGroup(80, 15);
-		var bg = new FlxShapeBox( -5, 0, 45, 15, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
-		takeButton.add(bg);
+		var buttonBg = new FlxShapeBox( -5, 0, 45, 15, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
+		takeButton.add(buttonBg);
 		
 		var arrow = new FlxSprite();
 		arrow.y = 3;
@@ -53,15 +53,15 @@ class PassengerOnPlanet extends Passenger
 		buyLabel.color = 0x000000;
 		takeButton.add(buyLabel);
 		
-		MouseEventManager.add(takeButton);
-		MouseEventManager.setMouseUpCallback(takeButton, take);
+		MouseEventManager.add(bg);
+		MouseEventManager.setMouseUpCallback(bg, take);
 		
 		add(takeButton);
 		
 		
 	}
 	
-	function take(button:FlxSpriteGroup)
+	function take(button:FlxSprite)
 	{
 		trace("take");
 		var passenger = new PassengerInInventory(from, to);

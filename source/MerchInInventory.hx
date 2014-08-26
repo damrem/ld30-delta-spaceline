@@ -20,7 +20,8 @@ class MerchInInventory extends Merch
 	{
 		super(Name);
 		
-		add(new FlxShapeBox(0, 0, 60, 60, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff }));
+		var bg = new FlxShapeBox(0, 0, 60, 60, { thickness:0, color:0xffffff }, { hasFill:true, color:0x80ffffff } );
+		add(bg);
 		
 		label = new FlxText(0, 0, 60, "", 10);
 		label.color = 0x000000;
@@ -38,8 +39,8 @@ class MerchInInventory extends Merch
 		var sellLabel = new FlxText(10, 0, 30, "Sell");
 		sellLabel.color = 0x000000;
 		sellButton.add(sellLabel);
-		MouseEventManager.add(sellButton);
-		MouseEventManager.setMouseUpCallback(sellButton, sell);
+		MouseEventManager.add(bg);
+		MouseEventManager.setMouseUpCallback(bg, sell);
 		add(sellButton);
 		
 		var icon = getNewIcon();
@@ -47,7 +48,7 @@ class MerchInInventory extends Merch
 		icon.x = icon.y = 22;
 	}
 	
-	function sell(?button:FlxSpriteGroup) 
+	function sell(?button:FlxSprite) 
 	{
 		//trace("sell");
 		PlayState.market.trader.fromInventoryToMarket(this);
