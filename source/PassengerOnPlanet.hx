@@ -67,7 +67,7 @@ class PassengerOnPlanet extends Passenger
 		var passenger = new PassengerInInventory(from, to);
 		if (Inventory.single.takePassenger(passenger))
 		{
-			Inventory.single.addCredits(this.getFare());
+			//Inventory.single.addCredits(this.getFare());
 			Market.single.removePassenger(this);
 			Market.single.updatePassengers();
 		}

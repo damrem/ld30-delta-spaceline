@@ -92,6 +92,12 @@ class PlayState extends FlxState
 		market.x = market.y = 10;
 		add(market);
 		
+		var line:LineStyle = { thickness:1, color:0xffffffff };
+		var fill:FillStyle = { hasFill:true, color:0xffffffff };
+		path = new FlxShapeBox(0, 0, 1, 1, line, fill);
+		space.add(path);
+		path.visible = false;
+		
 		planets = new FlxSpriteGroup(150, 0, 10000);
 		space.add(planets);
 		
@@ -173,11 +179,7 @@ class PlayState extends FlxState
 		
 		var nbPlanets = FlxRandom.intRanged(8, 12);
 		
-		var line:LineStyle = { thickness:1, color:0xffffffff };
-		var fill:FillStyle = { hasFill:true, color:0xffffffff };
-		path = new FlxShapeBox(0, 0, 1, 1, line, fill);
-		space.add(path);
-		path.visible = false;
+		
 		
 		fare = new FlxText(0, 0, 25, "");
 		fare.alignment = 'right';
@@ -347,7 +349,9 @@ class PlayState extends FlxState
 			
 			ship.takeOff();
 			
-			
+			path.visible = false;
+			fare.visible = false;
+			fareCoin.visible = false;
 		}
 		/*
 		else if(ship.isTravelling)
@@ -375,6 +379,7 @@ class PlayState extends FlxState
 			currentPlanet.highlight();
 			market.setPlanet(currentPlanet);
 			market.visible = true;
+			
 			
 
 			Inventory.single.removePassenger(currentPlanet);

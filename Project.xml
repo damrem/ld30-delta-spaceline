@@ -34,11 +34,11 @@
 	
 	<!--------------------------------LIBRARIES------------------------------------->
 	
-	<haxelib name="openfl" version="1.4.0" />
-	<haxelib name="flixel" version="3.3.1" />
+	<haxelib name="openfl" />
+	<haxelib name="flixel" />
 	
 	<!--In case you want to use the addons package-->
-	<haxelib name="flixel-addons" version="1.1.0" />
+	<haxelib name="flixel-addons"  />
 	
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui"/>

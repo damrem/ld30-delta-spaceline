@@ -93,7 +93,7 @@ class Inventory extends FlxSpriteGroup
 	
 	function updateTravels() 
 	{
-		travelLabel.text = "" + nbTravels;
+		travelLabel.text = "x" + nbTravels;
 	}
 	
 	function isFull()
@@ -155,6 +155,7 @@ class Inventory extends FlxSpriteGroup
 				var passenger:Passenger = cast(item);
 				if (passenger.to == to)
 				{
+					addCredits(passenger.getFare());
 					slots.remove(passenger, true);
 					i--;
 					passenger.destroy();
